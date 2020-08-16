@@ -1,4 +1,4 @@
-import Treemap from '../components/Map/Treemap'
+import MatrixFilter from '../components/Map/MatrixFilter'
 import {connect} from 'react-redux';
 
 function mapReduxStateToReactProps(state){
@@ -8,19 +8,19 @@ function mapReduxStateToReactProps(state){
         data:state.data,
         color:state.color,
         isNodeClicked:state.isNodeClicked,
-        isCellClicked:state.isCellClicked,
+        selectedCellsArr:state.selectedCellsArr,
         treeData: state.treeData,
         heatData: state.heatData
     }
 }
 function mapDispatchToProps(dispatch){
     return{
-        onClusterClick:function(ele){
-            dispatch({type:'CLUSTERCLICKED', selectedCluster:ele})
+        onCellClick:function(ele){
+            dispatch({type:'CELLCLICKED', selectedCellsArr:ele})
         },
-        onChangeTreeData:function(ele){
-            dispatch({type:'TREEDATACHANGE', ancesterCluster:ele})
+        onChangeMatrixData:function(ele){
+            dispatch({type:'MATRIXDATACHANGE', matrixData:ele})
         }
     }
 }
-export default connect(mapReduxStateToReactProps, mapDispatchToProps)(Treemap)
+export default connect(mapReduxStateToReactProps, mapDispatchToProps)(MatrixFilter)

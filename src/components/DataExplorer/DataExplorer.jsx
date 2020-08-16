@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {Route, Switch, Link, NavLink, useParams, Router} from 'react-router-dom';
 
-export default class Treemap extends Component{
-    state={size:1, selectedMap:"dasdfa"}
+export default class DataExplorer extends Component{
+    state={size:1, selectedMap:null}
     render(){
         return(
             <div>
-                <h1>Tree Map</h1>
+                <h1>Data Explorer</h1>
                 <div className="input">
                     <input type="button" value="+" onClick={function(){
                                 this.props.onClick(this.state.size);
