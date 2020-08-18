@@ -1,5 +1,6 @@
-import Notebook from '../components/Notebook/Notebook'
+import CohortOverview from '../components/Topbar/CohortOverview'
 import {connect} from 'react-redux';
+
 function mapReduxStateToReactProps(state){
     return {
         number:state.number,
@@ -10,16 +11,18 @@ function mapReduxStateToReactProps(state){
         treeData: state.treeData,
         heatData: state.heatData,
         isChangeCohort:state.isChangeCohort,
-        isManageCohort:state.isManageCohort,
+        isAddCohort:state.isAddCohort,
         cohortTitle:state.cohortTitle,
-        isExplanation:state.isExplanation
+        cohorts:state.cohorts,
+        max_id:state.max_id,
+        currentCohort:state.currentCohort
     }
 }
 function mapDispatchToProps(dispatch){
     return{
-        // onClickExplanation:function(e){
-        //     dispatch({type:'VIEWEXPLANATION', openExplanation:e})
-        // }
+        onClickCohortInfo:function(e){
+            dispatch({type:'COHORTINFOCLOSE', cohortInfo:e})
+        }
     }
 }
-export default connect(mapReduxStateToReactProps, mapDispatchToProps)(Notebook)
+export default connect(mapReduxStateToReactProps, mapDispatchToProps)(CohortOverview)

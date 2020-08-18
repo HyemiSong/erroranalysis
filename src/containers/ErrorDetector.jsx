@@ -1,4 +1,4 @@
-import Map from '../components/Map/Map'
+import ErrorDetector from '../components/ErrorDetector/ErrorDetector'
 import {connect} from 'react-redux';
 function mapReduxStateToReactProps(state){
     return {
@@ -12,4 +12,4 @@ function mapDispatchToProps(dispatch){
         }
     }
 }
-export default connect(mapReduxStateToReactProps, mapDispatchToProps)(Map)
+export default connect(mapReduxStateToReactProps, mapDispatchToProps)(ErrorDetector)

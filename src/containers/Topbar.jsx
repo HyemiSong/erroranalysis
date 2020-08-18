@@ -9,19 +9,24 @@ function mapReduxStateToReactProps(state){
         isCellClicked:state.isCellClicked,
         treeData: state.treeData,
         heatData: state.heatData,
-        isChangeCohort:state.isChangeCohort,
+        isCohortInfo:state.isCohortInfo,
         isManageCohort:state.isManageCohort,
-        cohortTitle:state.cohortTitle
+        cohortTitle:state.cohortTitle,
+        isExplanation:state.isExplanation,
+        currentCohort:state.currentCohort
     }
 }
 function mapDispatchToProps(dispatch){
     return{
-        onClickChangeCohort:function(e){
-            dispatch({type:'CHANGECOHORT', changeCohort:e})
+        onClickCohortInfo:function(e){
+            dispatch({type:'COHORTINFO', cohortInfo:e})
         },
         onClickManageCohort:function(e){
             dispatch({type:'MANAGECOHORT', manageCohort:e})
-        }
+        },
+        onClickExplanation:function(e){
+            dispatch({type:'VIEWEXPLANATION', openExplanation:e})
+        },
     }
 }
 export default connect(mapReduxStateToReactProps, mapDispatchToProps)(Topbar)

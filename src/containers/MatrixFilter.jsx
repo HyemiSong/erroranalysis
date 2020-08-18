@@ -1,4 +1,4 @@
-import MatrixFilter from '../components/Map/MatrixFilter'
+import MatrixFilter from '../components/ErrorDetector/MatrixFilter'
 import {connect} from 'react-redux';
 
 function mapReduxStateToReactProps(state){

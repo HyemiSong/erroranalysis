@@ -1,4 +1,4 @@
-import Treemap from '../components/Map/Treemap'
+import Treemap from '../components/ErrorDetector/Treemap'
 import {connect} from 'react-redux';
 
 function mapReduxStateToReactProps(state){
@@ -10,7 +10,8 @@ function mapReduxStateToReactProps(state){
         isNodeClicked:state.isNodeClicked,
         isCellClicked:state.isCellClicked,
         treeData: state.treeData,
-        heatData: state.heatData
+        heatData: state.heatData,
+        currentCluster: state.currentCluster
     }
 }
 function mapDispatchToProps(dispatch){
@@ -19,7 +20,7 @@ function mapDispatchToProps(dispatch){
             dispatch({type:'CLUSTERCLICKED', selectedCluster:ele})
         },
         onChangeTreeData:function(ele){
-            dispatch({type:'TREEDATACHANGE', ancesterCluster:ele})
+            dispatch({type:'CURRENTCOHORT', ancesterCluster:ele})
         }
     }
 }

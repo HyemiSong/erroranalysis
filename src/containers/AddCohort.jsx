@@ -28,6 +28,9 @@ function mapDispatchToProps(dispatch){
         },
         onSubmitMaxID:function(e){
             dispatch({type:'MAXID', newMaxId:e})
+        },
+        onClickAddCohort:function(e){
+            dispatch({type:'ADDCOHORT', addCohort:e})
         }
     }
 }
