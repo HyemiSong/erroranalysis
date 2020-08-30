@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import ManageCohortRoot from './ManageCohortRoot';
 import CohortOverviewRoot from './CohortOverviewRoot';
-import { ActionButton, IIconProps } from 'office-ui-fabric-react';
+import { ActionButton, initializeIcons } from 'office-ui-fabric-react';
+import { PrimaryButton } from 'office-ui-fabric-react';
+import { FontSizes } from '@uifabric/fluent-theme';
+import { Dropdown, DropdownMenuItemType, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 
 export default class Topbar extends Component{
-    
+
     cohortInfo(){
        const{ isCohortInfo } = this.props;
        let manageCohort = null;
@@ -26,15 +29,31 @@ export default class Topbar extends Component{
          }
          return manageCohort
     }
-    loadView(){
+   
+    render(){
+        initializeIcons();
+        const { disabled, checked } = this.props;
+        const addFriendIcon = { iconName: 'AddFriend' };
+        const stackTokens = { childrenGap: 40 };
         const{ isExplanation } = this.props;
+       
+        const dropdownStyles = {
+            dropdown: { width: 300 },
+          };
+                
+        const options = [
+            { key: 'Treemap', text: 'Treemap' },
+            { key: 'Matrixfilter', text: 'Matrix Filter' }
+        ];
 
         const viewExplanation =
             <div>
-                <input type="button" value="View Explanation" onClick={function(e){
-                    let _clicked = true;
-                    this.props.onClickExplanation(_clicked);
-                }.bind(this)}></input>
+                <PrimaryButton text="Explanation" onClick={
+                    function(e){
+                        let _clicked = true;
+                        this.props.onClickExplanation(_clicked);
+                    }.bind(this)
+                } allowDisabledFocus disabled={disabled} checked={checked} />
             </div>
 
         const backToDetector =
@@ -47,16 +66,29 @@ export default class Topbar extends Component{
 
         const featureList =
             <div>
-                <input type="button" value="Retrain Error Rates"></input>
+                <ActionButton text="Feature List" onClick={
+                    function(e){
+                        // let _clicked = true;
+                        // this.props.onClickExplanation(_clicked);
+                    }.bind(this)
+                } iconProps={addFriendIcon} allowDisabledFocus disabled={disabled} checked={checked} />
             </div>
         
         const mapSelector =
             <div className="input">
+                {/* <Dropdown
+                placeholder="Select an option"
+                label="Basic uncontrolled example"
+                options={options}
+                styles={dropdownStyles}
+                onChange={function(e){
+                    this.props.onChange(e.target.value)
+                }.bind(this)} /> */}
+
                 <select name="maps" id="maps" value={this.props.map} 
                     onChange={function(e){
                         this.props.onChange(e.target.value)
-                    }.bind(this)}
-                >
+                    }.bind(this)}>
                     <option value="Treemap">Treemap</option>
                     <option value="Matrixfilter">Matrix Filter</option>
                 </select>
@@ -70,6 +102,7 @@ export default class Topbar extends Component{
             backBTN = null;
             featureListBTN = featureList;
             mapSelectorBTN = mapSelector;
+
         }else if(isExplanation === true){
             title = this.props.cohortTitle[0].explainer;
             explainBTN = null;
@@ -77,33 +110,23 @@ export default class Topbar extends Component{
             featureListBTN = null;
             mapSelectorBTN = null;
         }
-        return {title:title, explainBTN:explainBTN, backBTN:backBTN, mapSelectorBTN:mapSelectorBTN, featureListBTN:featureListBTN}
-    }
-   
-    render(){   
-        const { disabled, checked } = this.props;
-        const addFriendIcon = { iconName: 'AddFriend' };
-
+            
         return(
             <div>
-                <div className="topbar dropshadow-sm fixed top white_bg">
-                    <div className="input absolute left flex-container">
-                        <div>
-                            {this.loadView().backBTN}
+                <div className="breadcrumb">
+                   {backBTN}
+                </div>
+                <div className="topbar margine-left-1px border white_bg relative">
+                    <div className="input absolute left flex-container topBottomCenter">
+                        <div className="section" style={{ fontSize: FontSizes.size18 }}>
+                            {title}
                         </div>
-                        <div>
-                            {this.loadView().title}
-                        </div>
-                        {this.loadView().mapSelectorBTN}
+                        {mapSelectorBTN}
                     </div>
                     <div className="input absolute right flex-container">
-                        {this.loadView().featureListBTN}
+                        {featureListBTN}
                         <div>
-                            {/* <input type="button" value="Manage Cohort" onClick={function(e){
-                                let _clicked = true;
-                                this.props.onClickManageCohort(_clicked);
-                            }.bind(this)}></input> */}
-                            <ActionButton text="Manage Cohort" onClick={
+                            <ActionButton text="Cohort Setting" onClick={
                                 function(e){
                                     let _clicked = true;
                                     this.props.onClickManageCohort(_clicked);
@@ -111,12 +134,14 @@ export default class Topbar extends Component{
                             } iconProps={addFriendIcon} allowDisabledFocus disabled={disabled} checked={checked} />
                         </div>
                         <div>
-                            <input type="button" value="View Cohort Overview" onClick={function(e){
-                                let _clicked = true;
-                                this.props.onClickCohortInfo(_clicked)
-                            }.bind(this)}></input>
+                            <ActionButton text="Cohort Info" onClick={
+                                function(e){
+                                    let _clicked = true;
+                                    this.props.onClickCohortInfo(_clicked)
+                                }.bind(this)
+                            } iconProps={addFriendIcon} allowDisabledFocus disabled={disabled} checked={checked} />
                         </div>
-                         {this.loadView().explainBTN}
+                         {explainBTN}
                  </div>
                 </div>
                 {this.cohortInfo()}

@@ -133,7 +133,7 @@ console.log(props)
             props.onChangeMatrixData(updatedData);
 
             let _clicked = true;
-            props.onClickCohortInfo(_clicked)
+            //props.onClickCohortInfo(_clicked)
         }
 
         return(

@@ -13,7 +13,7 @@ export default class CohortOverview extends Component{
     }
     render(){
         return(
-            <div className="panel-md dropshadow-sm fixed top-50 right white_bg">
+            <div className="panel-md dropshadow-sm fixed top-100 right white_bg margine-right-15px">
                 <input type="button" value="Close" onClick={function(e){
                     let _clicked = false;
                     this.props.onClickCohortInfo(_clicked);

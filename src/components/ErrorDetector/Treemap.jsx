@@ -16,8 +16,8 @@ const ref = useRef();
 
     useEffect(() => {
         let i = 0;
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const width = 929;
+        const height = 535;
         const root = d3.hierarchy(treeData);
         const dx = 70;
         const dy = 60;
@@ -175,12 +175,12 @@ const ref = useRef();
         props.onClusterClick(isClicked)
         props.onChangeTreeData(_data)
         props.onChangeTransfrom(_transform)
-        props.onClickCohortInfo(_clicked)
+        //props.onClickCohortInfo(_clicked)
         
     }
 return(
     <div>
-    <div id="Treemap" className="padding-sm">
+    <div id="Treemap">
         <svg
         ref={ref}
         />

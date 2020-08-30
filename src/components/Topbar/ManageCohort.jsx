@@ -44,7 +44,7 @@ export default class ManageCohort extends Component{
         const { disabled, checked } = this.props;
         
         return(
-            <div className="panel-md dropshadow-sm fixed top-50 right white_bg">
+            <div className="panel-md dropshadow-sm fixed top-100 right white_bg margine-right-15px">
 
             <DefaultButton text="Close" onClick={
                 function(e){

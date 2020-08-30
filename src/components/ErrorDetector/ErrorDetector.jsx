@@ -16,11 +16,9 @@ export default class ErrorDetector extends Component{
 
     render(){
         return(
-            <div className="relative top-30 col-lg">
-                <div className="canvas leftRightCenter">
-                    <div>
+            <div className="ErrorDetector">
+                <div className="canvas">
                     {this.mapSelect()}
-                    </div>
                 </div>
 
             </div>
