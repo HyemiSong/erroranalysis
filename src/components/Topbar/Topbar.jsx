@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import ManageCohortRoot from './ManageCohortRoot';
 import CohortOverviewRoot from './CohortOverviewRoot';
+import { ActionButton, IIconProps } from 'office-ui-fabric-react';
+
 
 export default class Topbar extends Component{
     
@@ -47,24 +49,41 @@ export default class Topbar extends Component{
             <div>
                 <input type="button" value="Retrain Error Rates"></input>
             </div>
+        
+        const mapSelector =
+            <div className="input">
+                <select name="maps" id="maps" value={this.props.map} 
+                    onChange={function(e){
+                        this.props.onChange(e.target.value)
+                    }.bind(this)}
+                >
+                    <option value="Treemap">Treemap</option>
+                    <option value="Matrixfilter">Matrix Filter</option>
+                </select>
+            </div>
 
-        let title, explainBTN, backBTN, featureListBTN = null;
+        let title, explainBTN, backBTN, featureListBTN, mapSelectorBTN= null;
 
         if(isExplanation === false || isExplanation === undefined){
             title = this.props.cohortTitle[0].detector;
             explainBTN = viewExplanation;
             backBTN = null;
             featureListBTN = featureList;
+            mapSelectorBTN = mapSelector;
         }else if(isExplanation === true){
             title = this.props.cohortTitle[0].explainer;
             explainBTN = null;
             backBTN = backToDetector;
             featureListBTN = null;
+            mapSelectorBTN = null;
         }
-        return {title:title, explainBTN:explainBTN, backBTN:backBTN, featureListBTN:featureListBTN}
+        return {title:title, explainBTN:explainBTN, backBTN:backBTN, mapSelectorBTN:mapSelectorBTN, featureListBTN:featureListBTN}
     }
    
-    render(){
+    render(){   
+        const { disabled, checked } = this.props;
+        const addFriendIcon = { iconName: 'AddFriend' };
+
         return(
             <div>
                 <div className="topbar dropshadow-sm fixed top white_bg">
@@ -75,14 +94,21 @@ export default class Topbar extends Component{
                         <div>
                             {this.loadView().title}
                         </div>
+                        {this.loadView().mapSelectorBTN}
                     </div>
                     <div className="input absolute right flex-container">
                         {this.loadView().featureListBTN}
                         <div>
-                            <input type="button" value="Manage Cohort" onClick={function(e){
+                            {/* <input type="button" value="Manage Cohort" onClick={function(e){
                                 let _clicked = true;
                                 this.props.onClickManageCohort(_clicked);
-                            }.bind(this)}></input>
+                            }.bind(this)}></input> */}
+                            <ActionButton text="Manage Cohort" onClick={
+                                function(e){
+                                    let _clicked = true;
+                                    this.props.onClickManageCohort(_clicked);
+                                }.bind(this)
+                            } iconProps={addFriendIcon} allowDisabledFocus disabled={disabled} checked={checked} />
                         </div>
                         <div>
                             <input type="button" value="View Cohort Overview" onClick={function(e){

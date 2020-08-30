@@ -11,7 +11,9 @@ function mapReduxStateToReactProps(state){
         isCellClicked:state.isCellClicked,
         treeData: state.treeData,
         heatData: state.heatData,
-        currentCluster: state.currentCluster
+        currentCluster: state.currentCluster,
+        isCohortInfo:state.isCohortInfo,
+        d3Transform: state.d3Transform
     }
 }
 function mapDispatchToProps(dispatch){
@@ -21,6 +23,12 @@ function mapDispatchToProps(dispatch){
         },
         onChangeTreeData:function(ele){
             dispatch({type:'CURRENTCOHORT', ancesterCluster:ele})
+        },
+        onChangeTransfrom:function(ele){
+            dispatch({type:'TRANSFORM', changeTransfrom:ele})
+        },
+        onClickCohortInfo:function(e){
+            dispatch({type:'COHORTINFO', cohortInfo:e})
         }
     }
 }

@@ -10,6 +10,7 @@ function mapReduxStateToReactProps(state){
         isNodeClicked:state.isNodeClicked,
         selectedCellsArr:state.selectedCellsArr,
         treeData: state.treeData,
+        isCohortInfo:state.isCohortInfo,
         heatData: state.heatData
     }
 }
@@ -20,6 +21,9 @@ function mapDispatchToProps(dispatch){
         },
         onChangeMatrixData:function(ele){
             dispatch({type:'MATRIXDATACHANGE', matrixData:ele})
+        },
+        onClickCohortInfo:function(e){
+            dispatch({type:'COHORTINFO', cohortInfo:e})
         }
     }
 }

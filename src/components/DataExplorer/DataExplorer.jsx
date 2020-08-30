@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
+import Mockup from '../../image/dataExplorer.png'
 
 export default class DataExplorer extends Component{
     state={size:1, selectedMap:null}
     render(){
         return(
             <div>
-                <h1>Data Explorer</h1>
+                <img src={Mockup} className="mockup padding-top-md"></img>
+               
+                {/* <h1>Data Explorer</h1>
                 <div className="input">
                     <input type="button" value="+" onClick={function(){
                                 this.props.onClick(this.state.size);
@@ -31,7 +34,7 @@ export default class DataExplorer extends Component{
                      </select>
                      <p><input type="text" value={this.props.map} readOnly></input></p>
                  </div>
-                </div>
+                </div> */}
             </div>
         )
     }

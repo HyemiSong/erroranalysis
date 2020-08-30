@@ -21,6 +21,7 @@ export default createStore(function(state, action){
             isManageCohort:false,
             isAddCohort:false,
             isOverview:false,
+            d3Transform: {k:1, x:window.innerWidth/1.5, y:50},
             cohortTitle:[{detector:"Error Detector", explainer:"Explanation"}],
             max_id:2,
             cohorts:[
@@ -73,6 +74,9 @@ export default createStore(function(state, action){
     }
     if(action.type === 'BACKTODETECTOR'){
         return {...state, isExplanation:action.openExplanation}
+    }
+    if(action.type === 'TRANSFORM'){
+        return {...state, d3Transform:action.changeTransfrom}
     }
     return state;
 }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())

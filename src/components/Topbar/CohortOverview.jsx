@@ -1,6 +1,16 @@
 import React, {Component} from 'react';
 
 export default class CohortOverview extends Component{
+    tempCohort(){
+        const { map } = this.props
+        let tempCohort = null;
+        if (map === "Treemap"){
+            tempCohort =  this.props.currentCohort.clickedNode.id
+        } else if (map === "Matrixfilter"){
+            tempCohort = "test"
+        }
+        return tempCohort
+    }
     render(){
         return(
             <div className="panel-md dropshadow-sm fixed top-50 right white_bg">
@@ -26,7 +36,8 @@ export default class CohortOverview extends Component{
                         Current Cohort
                     </div>
                     <div>
-                        Temp.Cohort: {this.props.currentCohort.clickedNode.id}
+                        Temp.Cohort:
+                       {this.tempCohort()}
                     </div>
                 </div>
             </div>

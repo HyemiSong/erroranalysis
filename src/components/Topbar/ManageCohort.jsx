@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AddCohortRoot from './AddCohortRoot'
+import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
 
 export default class ManageCohort extends Component{
     createCohort(){
@@ -12,6 +13,7 @@ export default class ManageCohort extends Component{
          }
          return manageCohort
     }
+    å  
     render(){
         let tempCohort = [];
         let savedCohort = [];
@@ -38,12 +40,23 @@ export default class ManageCohort extends Component{
                 </li>
             )
         }
+
+        const { disabled, checked } = this.props;
+        
         return(
             <div className="panel-md dropshadow-sm fixed top-50 right white_bg">
-                <input type="button" value="Close" onClick={function(e){
+
+            <DefaultButton text="Close" onClick={
+                function(e){
                     let _clicked = false;
                     this.props.onCloseManageCohort(_clicked);
-                }.bind(this)}></input>
+                }.bind(this)
+            } allowDisabledFocus disabled={disabled} checked={checked} />
+
+                {/* <input type="button" value="Close" onClick={function(e){
+                    let _clicked = false;
+                    this.props.onCloseManageCohort(_clicked);
+                }.bind(this)}></input> */}
 
                 <div className="panelTitle marginBotton_md">
                     Manage Cohort

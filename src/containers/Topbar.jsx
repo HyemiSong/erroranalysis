@@ -27,6 +27,9 @@ function mapDispatchToProps(dispatch){
         onClickExplanation:function(e){
             dispatch({type:'VIEWEXPLANATION', openExplanation:e})
         },
+        onChange:function(selectedMap){
+            dispatch({type:'MAP', selectedMap:selectedMap})
+        }
     }
 }
 export default connect(mapReduxStateToReactProps, mapDispatchToProps)(Topbar)

@@ -131,6 +131,9 @@ console.log(props)
             // props.onCellClick(clickedCells)
             setMatrixData(updatedData);
             props.onChangeMatrixData(updatedData);
+
+            let _clicked = true;
+            props.onClickCohortInfo(_clicked)
         }
 
         return(
@@ -158,11 +161,6 @@ console.log(props)
                 <svg
                 ref={ref}
                 />
-
-                {/* <div className="input absolute left flex-container">
-                        <div><input type="button" value="Make a Temp. Cohort">
-                        </input></div>
-                </div> */}
                 </div>               
             </div>
         )
