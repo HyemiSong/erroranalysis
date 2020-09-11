@@ -5,7 +5,7 @@ import FaceAPI from './FaceAPI'
 
 export default createStore(function(state, action){
     console.log(state, action)
-    console.log(FaceAPI())
+    // console.log(FaceAPI())
     if(state === undefined){
         return{
             number:0,
@@ -21,12 +21,14 @@ export default createStore(function(state, action){
             isManageCohort:false,
             isAddCohort:false,
             isOverview:false,
+            isLocalExplanation:false,
+            isWhatIf:false,
             d3Transform: {k:1, x:window.innerWidth/1.5, y:50},
             cohortTitle:[{detector:"Error Detector", explainer:"Explanation"}],
             max_id:2,
             cohorts:[
-                {id:1, name:'Temp.Cohort1', parent:'Tree Map', meta:'metadata', filter:''},
-                {id:2, name:'Temp.Cohort2', parent:'Tree Map', meta:'metadata', filter:''}
+                {id:1, name:'Temporary Cohort1', parent:'Tree Map', meta:'metadata', filter:'', coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
+                {id:2, name:'Temporary Cohort2', parent:'Matrix Filter Map', meta:'metadata', filter:'', coverage: 0, errorRate:0, success:0, error:0}
             ]
         }
     }
@@ -77,6 +79,15 @@ export default createStore(function(state, action){
     }
     if(action.type === 'TRANSFORM'){
         return {...state, d3Transform:action.changeTransfrom}
+    }
+    if(action.type === 'UPDATECOHORTINFO'){
+        return {...state, cohorts:action.updateCohorts}
+    }
+    if(action.type === 'LOCALLOADED'){
+        return {...state, isLocalExplanation:action.loadedLocalEx}
+    }
+    if(action.type === 'WHATIF'){
+        return {...state, isWhatIf:action.WhatIfClick}
     }
     return state;
 }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())

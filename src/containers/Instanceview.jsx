@@ -4,8 +4,16 @@ function mapReduxStateToReactProps(state){
     return{
         number:state.number,
         map:state.map,
-        data:state.data
+        data:state.data,
+        isLocalExplanation:state.isLocalExplanation
+    }
+}
+function mapDispatchToProps(dispatch){
+    return{
+        onLoad:function(e){
+            dispatch({type:'LOCALLOADED', loadedLocalEx:e})
+        }
     }
 }
 
-export default connect(mapReduxStateToReactProps)(Instanceview)
+export default connect(mapReduxStateToReactProps, mapDispatchToProps)(Instanceview)

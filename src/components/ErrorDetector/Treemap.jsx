@@ -1,16 +1,18 @@
 import React, {useRef, useState, useEffect} from 'react';
 import * as d3 from 'd3';
+import { nodeColor } from '../../Constant'
 
 export default function Treemap (props){
 //console.log(props)
 const data = props.isNodeClicked;
 const treeData = props.treeData;
 const d3Transform = props.d3Transform;
+const cohorts = props.cohorts;
+
 const [selectedCluster, setCluster] = useState(data);
 const [ancesterCluster, setAncester] = useState(treeData)
 const [transform, setTransform] = useState(d3Transform)
-
-console.log(transform)
+const [selectedClusterInfo, setSelectedClusterInfo] = useState(cohorts)
 
 const ref = useRef();
 
@@ -19,8 +21,8 @@ const ref = useRef();
         const width = 929;
         const height = 535;
         const root = d3.hierarchy(treeData);
-        const dx = 70;
-        const dy = 60;
+        const dx = 60;
+        const dy = 100;
         const margin = {top:50, botton:50, left:50, right:50};
         const tree = d3.tree().nodeSize([dx, dy]);
         const radius = 25;
@@ -44,12 +46,12 @@ const ref = useRef();
             .attr("background-color", "red")
 
         let zoom = d3.zoom()
-            .scaleExtent([1/2, 5])
+            .scaleExtent([1/3, 4])
             .on("zoom", zoomed);
 
         function zoomed() {
                 g.attr("transform", d3.event.transform);
-                console.log(transform.k)
+                //.log(transform.k)
                 _transform = d3.event.transform;
         }
 
@@ -58,15 +60,10 @@ const ref = useRef();
 
         const link = g
             .append("g")
-            .attr("fill", "none")
-            .attr("stroke", "#555")
-            .attr("stroke-width", 1)
             .selectAll("path")
             .data(root.links())
             .enter()
-            .append("path")
-            .attr( "d", d3.linkVertical().x(d => d.x).y(d => d.y))
-
+            
         const node = g
             .append("g")
             .selectAll("g")
@@ -75,12 +72,21 @@ const ref = useRef();
             .append("g")
             .attr("transform", d => `translate(${d.x},${d.y})`)
         
+        link
+            .append("path")
+            .attr("fill", "none")
+            // .attr("stroke", "#E1E1E1")
+            .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? nodeColor(((d.target.data.error/d.source.data.size) * 100).toFixed(1)) : "#E1E1E1"})
+            .attr( "d", d3.linkVertical().x(d => d.x).y(d => d.y))
+            .attr("stroke-width", d => d.source.data.size*0.02)
+            .attr("fake", d=> console.log(d.source.data.size));
+        
         node
             .append("circle")
             .attr("class", "node nodeID ")
-            .attr("fill", "white")
-            .attr("stroke", "black")
-            .attr("stroke-width", 1)
+            .attr("fill", "#D2D4D6")
+            .attr("stroke", function(d){return (d.data.ancestor === true) ? "#E3008C" : "#B2B7BD";})
+            .attr("stroke-width", function(d){return (d.data.ancestor === true) ? 2 : 2;})
             .attr("r", radius)
             //.attr("fake", d=> console.log(d));
 
@@ -96,7 +102,12 @@ const ref = useRef();
                 }
                 return h;
         }
-        //console.log(rectHeight(10))
+
+        let calHeight = function(d){
+            let side = radius;
+            let height = side * (d.data.error/d.data.size);
+            return height
+        }
 
         node
             .append("clipPath")
@@ -105,37 +116,32 @@ const ref = useRef();
             .append('rect')
             .attr("x", function(d){return radius * (-1)})
             .attr("width", function(d){return radius * 2})
-            .attr("y", function(d, i){return radius-rectHeight(10)})
-            .attr("height", function(d, i){return 2*rectHeight(10)})
+            .attr("y", function(d, i){return -10 + (radius-2*rectHeight(calHeight(d)))})
+            .attr("height", function(d, i){return 2*rectHeight(radius)})
             
         node
             .append("circle")
             .attr("class", "mask")
             .attr("clip-path", function(d, i) { return "url(#clip" + i + ")"})
-            .attr("fill", function(d){return (d.data.ancestor === true || d.data.ancestor === undefined) ? "green" : "yellow";})
-            .attr("r", radius)
-            //.attr("fake", d=> console.log(d));
+            .attr("fill", function(d, i) { return (d.data.error === 0) ? "#B2B7BD" : nodeColor(((d.data.error/d.data.size) * 100).toFixed(1))})
+            //.attr("opacity", function(d, i) { return (d.data.error/d.data.size) * 1.6 + 0.1})
+            .attr("r", radius*0.96)
+            .attr("fake", d => console.log(d));
 
         d3.selectAll(".node").attr("nodeID", function(d,i) {return "nodeID#" + i})
-
+        
         node
             .append("text")
-            .attr("dy", "0.31em")
-            .attr("x", d => (d.children ? -6 : 6))
-            .attr("text-anchor", d => (d.children ? "end" : "start"))
-            .text(d => d.data.name)
-            .select(function() {
-                return this.parentNode.insertBefore(this.cloneNode(true), this);
-            })
-            .attr("stroke", "white")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-width", 3);
+            .style("opacity", function(d){return (d.data.ancestor === true) ? 1 : 0;})
+            .attr("y", d => (-d.y/d.depth)*0.5)
+            .attr("text-anchor", "middle")
+            .text(d => {return (d.data.PredictionPath === undefined) ? "sdfasd" : d.data.PredictionPath.split(",").pop()})
 
         node
             .on("click", function(d, i){
                 let ancestors = [d.data.id];
                 let clickedNode = d.data;
-                let ancestor = (d.parent === null)? null : d.parent;
+                let ancestor = (d.parent === null)? d : d.parent;
                 //finding ancestors
                 let setParent = function(o){
                     ancestors.push(o.data.id)
@@ -159,31 +165,89 @@ const ref = useRef();
                     }
                 }
                 setAncestors(_data)
-                //console.log(_data)
                 
+                //metrix of clicked node
+                const _coverage = ((d.data.error/treeData.size) * 100).toFixed(1);
+                const _errorRate = ((d.data.error/d.data.size) * 100).toFixed(1);
+                const _success = d.data.success;
+                const _error = d.data.error;
+                const _filter = d.data.PredictionPath.split(",");
+                let _cohorts = [
+                        {id:1, name:'Temporary Cohort1', parent:'Tree Map', meta:'metadata', filter:_filter, coverage: _coverage, errorRate: _errorRate, success:_success, error:_error},
+                        {id:2, name:'Temporary Cohort2', parent:'Matrix Filter Map', meta:'metadata', filter:_filter, coverage: 0, errorRate:0, success:0, error:0}
+                    ]
                 let isClicked = (data === "false") ? "true" : "false";
-                clusterChange(isClicked, _data, _transform)
+                clusterChange(isClicked, _data, _transform, _cohorts)
             })
 
-    }, [data, treeData, d3Transform]);
+    }, [data, treeData, d3Transform, cohorts]);
 
-    function clusterChange(isClicked, _data, _transform){
-        let _clicked = true;
+    function clusterChange(isClicked, _data, _transform, _cohorts){
         setCluster(isClicked);
         setAncester(_data)
         setTransform(_transform)
+        setSelectedClusterInfo(_cohorts)
         props.onClusterClick(isClicked)
         props.onChangeTreeData(_data)
         props.onChangeTransfrom(_transform)
-        //props.onClickCohortInfo(_clicked)
-        
+        props.onChangeCohortInfo(_cohorts)
     }
 return(
     <div>
     <div id="Treemap">
-        <svg
-        ref={ref}
+        <svg className="absolute"
+            ref={ref}
         />
+        <div className="overview absolute padding-sm txt-left">
+            <div className="font-size-14 bold padding-left-xxsm margin-left-xxxsm">
+                Overview: Temporary cohort1
+            </div>
+            <div className="flex-container">
+                <div className="metric-area">
+                    <div className="flex-container padding-xxsm">
+                        <div id="metric-bar" className="black"></div>
+                        <div className="padding-xxsm">
+                            <div className="font-size-10 regular">Coverage (%)</div>
+                            <div className="font-size-28 bold">{cohorts[0].coverage}</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="metric-area">
+                    <div className="flex-container padding-xxsm">
+                        <div id="metric-bar" className="datavis-7-bg">
+                        </div>
+                        <div className="padding-xxsm">
+                            <div className="font-size-10 regular">Error rate (%)</div>
+                            <div className="font-size-28 bold datavis-7">{cohorts[0].errorRate}</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="metric-area">
+                    <div className="flex-container padding-xxsm">
+                       <div id="metric-bar" className="datavis-1-bg"></div>
+                        <div className="padding-xxsm">
+                            <div className="font-size-10 regular">Success (Num.)</div>
+                            <div className="font-size-28 bold flex-container">
+                                <div className="datavis-1">{cohorts[0].success}</div>
+                                <div>/{treeData.size}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="metric-area">
+                    <div className="flex-container padding-xxsm">
+                        <div id="metric-bar" className="datavis-7-bg"></div>
+                        <div className="padding-xxsm">
+                            <div className="font-size-10 regular">Error (Num.)</div>
+                            <div className="font-size-28 bold flex-container">
+                                <div className="datavis-7">{cohorts[0].error}</div>
+                                <div>/{treeData.size}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
 )

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-// import './App.css';
-// import './UI.css';
 import DataExplorerRoot from "../DataExplorer/DataExplorerRoot";
 import InstanceviewRoot from "../Instanceview/InstanceviewRoot";
 import GlobalFeatureRoot from "../GlobalFeature/GlobalFeatureRoot";
-import {Route, Switch, Link, NavLink, useParams, Router} from 'react-router-dom';
 import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivot';
-import { Label, ILabelStyles } from 'office-ui-fabric-react/lib/Label';
 
 class Explanation extends Component {
   render(){
@@ -14,16 +10,16 @@ class Explanation extends Component {
         <div className="App">
           <div>
                 <div className="nav panel-sm left relative">
-                  <div className="main top-180 fixed">
+                  <div className="main fixed padding-top-sm padding-left-md">
                   <Pivot aria-label="Large Link Size Pivot Example" linkSize={PivotLinkSize.small}>
-                    <PivotItem headerText="My Files">
+                    <PivotItem headerText="Data Explorer">
                       <DataExplorerRoot/>
                     </PivotItem>
-                    <PivotItem headerText="Recent">
-                      <InstanceviewRoot/>
-                    </PivotItem>
-                    <PivotItem headerText="Shared with me">
+                    <PivotItem headerText="Global Explanation">
                       <GlobalFeatureRoot/>
+                    </PivotItem>
+                    <PivotItem headerText="Local Explanation">
+                      <InstanceviewRoot/>
                     </PivotItem>
                   </Pivot>
                   </div>

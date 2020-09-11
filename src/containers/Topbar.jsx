@@ -13,7 +13,10 @@ function mapReduxStateToReactProps(state){
         isManageCohort:state.isManageCohort,
         cohortTitle:state.cohortTitle,
         isExplanation:state.isExplanation,
-        currentCohort:state.currentCohort
+        currentCohort:state.currentCohort,
+        cohorts:state.cohorts,
+        isLocalExplanation:state.isLocalExplanation,
+        isWhatIf:state.isWhatIf
     }
 }
 function mapDispatchToProps(dispatch){
@@ -29,6 +32,9 @@ function mapDispatchToProps(dispatch){
         },
         onChange:function(selectedMap){
             dispatch({type:'MAP', selectedMap:selectedMap})
+        },
+        onWhatIfClick:function(e){
+            dispatch({type:'WHATIF', WhatIfClick:e})
         }
     }
 }

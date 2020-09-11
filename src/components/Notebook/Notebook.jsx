@@ -8,7 +8,7 @@ import NotebookTab from "../../image/NotebookTop.png"
 class Notebook extends Component {
   loadView(){
     const{ isExplanation } = this.props;
-    console.log(isExplanation)
+    //console.log(isExplanation)
     let view = null;
     if(isExplanation === false || isExplanation === undefined){
       view = <ErrorDetectorRoot></ErrorDetectorRoot>

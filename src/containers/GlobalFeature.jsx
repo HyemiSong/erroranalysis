@@ -1,10 +1,11 @@
 import GlobalFeature from '../components/GlobalFeature/GlobalFeature'
 import {connect} from 'react-redux';
 function mapReduxStateToReactProps(state){
-    return {
+    return{
         number:state.number,
         map:state.map,
-        data:state.data
+        data:state.data,
+        isLocalExplanation:state.isLocalExplanation
     }
 }
 function mapDispatchToProps(dispatch){
@@ -14,6 +15,9 @@ function mapDispatchToProps(dispatch){
         },
         onChange:function(selectedMap){
             dispatch({type:'MAP', selectedMap:selectedMap})
+        },
+        onLoad:function(e){
+            dispatch({type:'LOCALLOADED', loadedLocalEx:e})
         }
     }
 }
