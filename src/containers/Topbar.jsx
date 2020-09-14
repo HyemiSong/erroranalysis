@@ -30,7 +30,7 @@ function mapDispatchToProps(dispatch){
         onClickExplanation:function(e){
             dispatch({type:'VIEWEXPLANATION', openExplanation:e})
         },
-        onChange:function(selectedMap){
+        onChangeMap:function(selectedMap){
             dispatch({type:'MAP', selectedMap:selectedMap})
         },
         onWhatIfClick:function(e){

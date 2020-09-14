@@ -11,7 +11,8 @@ function mapReduxStateToReactProps(state){
         selectedCellsArr:state.selectedCellsArr,
         treeData: state.treeData,
         isCohortInfo:state.isCohortInfo,
-        heatData: state.heatData
+        heatData: state.heatData,
+        cohorts: state.cohorts
     }
 }
 function mapDispatchToProps(dispatch){
@@ -24,6 +25,9 @@ function mapDispatchToProps(dispatch){
         },
         onClickCohortInfo:function(e){
             dispatch({type:'COHORTINFO', cohortInfo:e})
+        },
+        onChangeCurrentCohort:function(e){
+            dispatch({type:'CURRENTCOHORT', currentCohort:e})
         }
     }
 }

@@ -13,7 +13,10 @@ function mapReduxStateToReactProps(state){
         isAddCohort:state.isAddCohort,
         cohortTitle:state.cohortTitle,
         cohorts:state.cohorts,
-        max_id:state.max_id
+        max_id:state.max_id,
+        currentCohort:state.currentCohort,
+        isExplanation:state.isExplanation,
+        selectedCohortName:state.selectedCohortName
     }
 }
 function mapDispatchToProps(dispatch){
@@ -23,6 +26,15 @@ function mapDispatchToProps(dispatch){
         },
         onClickAddCohort:function(e){
             dispatch({type:'ADDCOHORT', addCohort:e})
+        },
+        onClickExplanation:function(e){
+            dispatch({type:'VIEWEXPLANATION', openExplanation:e})
+        },
+        onChangeMap:function(e){
+            dispatch({type:'MAP', selectedMap:e})
+        },
+        onChangeCohortName:function(e){
+            dispatch({type:'SELECTEDCOHORTNAME', selectedCohortName:e})
         }
     }
 }

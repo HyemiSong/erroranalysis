@@ -51,7 +51,7 @@ export default class AddCohort extends Component{
                                 let newCohorts = this.props.cohorts.concat();
                                 let clicked = false;
 
-                                newCohorts.push({id:maxID, name:_name, parent:null, meta:null, filter:_filter})
+                                newCohorts.push({key:maxID, id:maxID, name:_name, parent:null, meta:null, filter:_filter})
                                 this.props.onSubmitCohort(newCohorts);
                                 this.props.onSubmitMaxID(maxID);
                                 this.props.onCloseAddCohort(clicked);

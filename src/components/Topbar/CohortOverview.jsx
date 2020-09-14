@@ -42,7 +42,7 @@ export default class CohortOverview extends Component{
                             Current cohort
                         </div>
                         <div>
-                            Temporary Cohort1 (by {this.props.map})
+                            {this.props.currentCohort.name} ({this.props.map})
                         </div>
                     </div>
                 </div>

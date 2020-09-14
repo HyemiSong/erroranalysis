@@ -11,19 +11,20 @@ function mapReduxStateToReactProps(state){
         isCellClicked:state.isCellClicked,
         treeData: state.treeData,
         heatData: state.heatData,
-        currentCluster: state.currentCluster,
+        //currentCluster: state.currentCluster,
         isCohortInfo:state.isCohortInfo,
         d3Transform: state.d3Transform,
-        cohorts: state.cohorts
+        cohorts: state.cohorts,
+        currentCohort: state.currentCohort
     }
 }
 function mapDispatchToProps(dispatch){
     return{
         onClusterClick:function(e){
-            dispatch({type:'CLUSTERCLICKED', selectedCluster:e})
+            dispatch({type:'NODECLICKED', selectedNode:e})
         },
         onChangeTreeData:function(e){
-            dispatch({type:'CURRENTCOHORT', ancesterCluster:e})
+            dispatch({type:'CURRENTNODE', ancesterNode:e})
         },
         onChangeTransfrom:function(e){
             dispatch({type:'TRANSFORM', changeTransfrom:e})
@@ -33,6 +34,9 @@ function mapDispatchToProps(dispatch){
         },
         onChangeCohortInfo:function(e){
             dispatch({type:'UPDATECOHORTINFO', updateCohorts:e})
+        },
+        onChangeCurrentCohort:function(e){
+            dispatch({type:'CURRENTCOHORT', currentCohort:e})
         }
     }
 }

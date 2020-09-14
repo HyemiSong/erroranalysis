@@ -38,14 +38,14 @@ export default class Topbar extends Component{
          }
          return whatIfPanel
     }
-   
+
     render(){
         initializeIcons();
         const { disabled, checked } = this.props;
         const bulletedListIcon = { iconName: 'BulletedList' };
         const settingsIcon = { iconName: 'Settings' };
         const cohortInfoIcon = { iconName: 'Info' };
-        const{ isExplanation, isLocalExplanation} = this.props;
+        const{ isExplanation, isLocalExplanation } = this.props;
        
         const viewExplanation =
             <div className="padding-top-xxsm padding-left-xsm ">
@@ -98,10 +98,10 @@ export default class Topbar extends Component{
 
                 <select name="maps" id="maps" value={this.props.map} 
                     onChange={function(e){
-                        this.props.onChange(e.target.value)
+                        this.props.onChangeMap(e.target.value)
                     }.bind(this)}>
                     <option value="Treemap">Tree map</option>
-                    <option value="Matrixfilter">Heat map</option>
+                    <option value="Heatmap">Heat map</option>
                 </select>
             </div>
 
@@ -115,7 +115,7 @@ export default class Topbar extends Component{
             mapSelectorBTN = mapSelector;
 
         }else if(isExplanation === true){
-            title = this.props.cohortTitle[0].explainer + ":" + " " + this.props.cohorts[0].name;
+            title = this.props.cohortTitle[0].explainer + ":" + " " + this.props.currentCohort.name;
             explainBTN = null;
             backBTN = backToDetector;
             featureListBTN = null;

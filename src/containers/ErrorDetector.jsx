@@ -2,7 +2,8 @@ import ErrorDetector from '../components/ErrorDetector/ErrorDetector'
 import {connect} from 'react-redux';
 function mapReduxStateToReactProps(state){
     return {
-        map:state.map
+        map:state.map,
+        cohorts:state.cohorts
     }
 }
 function mapDispatchToProps(dispatch){

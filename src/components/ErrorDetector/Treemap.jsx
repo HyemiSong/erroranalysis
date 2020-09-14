@@ -8,15 +8,22 @@ const data = props.isNodeClicked;
 const treeData = props.treeData;
 const d3Transform = props.d3Transform;
 const cohorts = props.cohorts;
+const cCohort = props.currentCohort;
 
 const [selectedCluster, setCluster] = useState(data);
 const [ancesterCluster, setAncester] = useState(treeData)
 const [transform, setTransform] = useState(d3Transform)
 const [selectedClusterInfo, setSelectedClusterInfo] = useState(cohorts)
+const [currentCohort, setCurrentCohort] = useState(cCohort)
 
 const ref = useRef();
-
     useEffect(() => {
+
+        //change current cohort
+        setCurrentCohort(cohorts[0])
+        props.onChangeCurrentCohort(cohorts[0])
+
+        //treemap setting
         let i = 0;
         const width = 929;
         const height = 535;
@@ -79,7 +86,7 @@ const ref = useRef();
             .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? nodeColor(((d.target.data.error/d.source.data.size) * 100).toFixed(1)) : "#E1E1E1"})
             .attr( "d", d3.linkVertical().x(d => d.x).y(d => d.y))
             .attr("stroke-width", d => d.source.data.size*0.02)
-            .attr("fake", d=> console.log(d.source.data.size));
+            // .attr("fake", d=> console.log(d.source.data.size));
         
         node
             .append("circle")
@@ -126,10 +133,10 @@ const ref = useRef();
             .attr("fill", function(d, i) { return (d.data.error === 0) ? "#B2B7BD" : nodeColor(((d.data.error/d.data.size) * 100).toFixed(1))})
             //.attr("opacity", function(d, i) { return (d.data.error/d.data.size) * 1.6 + 0.1})
             .attr("r", radius*0.96)
-            .attr("fake", d => console.log(d));
+            // .attr("fake", d => console.log(d));
 
         d3.selectAll(".node").attr("nodeID", function(d,i) {return "nodeID#" + i})
-        
+
         node
             .append("text")
             .style("opacity", function(d){return (d.data.ancestor === true) ? 1 : 0;})
@@ -173,8 +180,8 @@ const ref = useRef();
                 const _error = d.data.error;
                 const _filter = d.data.PredictionPath.split(",");
                 let _cohorts = [
-                        {id:1, name:'Temporary Cohort1', parent:'Tree Map', meta:'metadata', filter:_filter, coverage: _coverage, errorRate: _errorRate, success:_success, error:_error},
-                        {id:2, name:'Temporary Cohort2', parent:'Matrix Filter Map', meta:'metadata', filter:_filter, coverage: 0, errorRate:0, success:0, error:0}
+                        {id:0, name:cohorts[0].name, parent:'Treemap', meta:'metadata', filter:_filter, coverage: _coverage, errorRate: _errorRate, success:_success, error:_error},
+                        {id:1, name:cohorts[1].name, parent:'Heatmap', meta:'metadata', filter:_filter, coverage: 0, errorRate:0, success:0, error:0}
                     ]
                 let isClicked = (data === "false") ? "true" : "false";
                 clusterChange(isClicked, _data, _transform, _cohorts)
@@ -183,7 +190,7 @@ const ref = useRef();
     }, [data, treeData, d3Transform, cohorts]);
 
     function clusterChange(isClicked, _data, _transform, _cohorts){
-        setCluster(isClicked);
+        setCluster(isClicked)
         setAncester(_data)
         setTransform(_transform)
         setSelectedClusterInfo(_cohorts)
@@ -200,7 +207,7 @@ return(
         />
         <div className="overview absolute padding-sm txt-left">
             <div className="font-size-14 bold padding-left-xxsm margin-left-xxxsm">
-                Overview: Temporary cohort1
+                Temporary Cohort: {cohorts[0].name}
             </div>
             <div className="flex-container">
                 <div className="metric-area">

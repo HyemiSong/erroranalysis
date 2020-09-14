@@ -14,7 +14,8 @@ export default createStore(function(state, action){
             treeData: FaceAPI(),
             heatData: heatData,
             selectedCellsArr:[],
-            currentCohort:{name:"All data", children:[], level:0},
+            currentCohort:{},
+            currentNode:{name:"All Data-1", children:[], level:0},
             isExplanation:false,
             isNodeClicked:false,
             isCohortInfo:false,
@@ -25,10 +26,10 @@ export default createStore(function(state, action){
             isWhatIf:false,
             d3Transform: {k:1, x:window.innerWidth/1.5, y:50},
             cohortTitle:[{detector:"Error Detector", explainer:"Explanation"}],
-            max_id:2,
+            max_id:1,
             cohorts:[
-                {id:1, name:'Temporary Cohort1', parent:'Tree Map', meta:'metadata', filter:'', coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
-                {id:2, name:'Temporary Cohort2', parent:'Matrix Filter Map', meta:'metadata', filter:'', coverage: 0, errorRate:0, success:0, error:0}
+                {key:0, id:0, name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
+                {key:1, id:1, name:'All Data-2', parent:'Heatmap', meta:'metadata', filter:'', coverage: 0, errorRate:0, success:0, error:0}
             ]
         }
     }
@@ -41,11 +42,11 @@ export default createStore(function(state, action){
     if(action.type === 'CELLCLICKED'){
         return {...state, selectedCellsArr:action.selectedCellsArr}
     }
-    if(action.type === 'CLUSTERCLICKED'){
-        return {...state, isNodeClicked:action.selectedCluster}
+    if(action.type === 'NODECLICKED'){
+        return {...state, isNodeClicked:action.selectedNode}
     }
-    if(action.type === 'CURRENTCOHORT'){
-        return {...state, currentCohort:action.ancesterCluster}
+    if(action.type === 'CURRENTCNODE'){
+        return {...state, currentNode:action.ancesterNode}
     }
     if(action.type === 'COHORTINFO'){
         return {...state, isCohortInfo:action.cohortInfo}
@@ -88,6 +89,12 @@ export default createStore(function(state, action){
     }
     if(action.type === 'WHATIF'){
         return {...state, isWhatIf:action.WhatIfClick}
+    }
+    if(action.type === 'CURRENTCOHORT'){
+        return {...state, currentCohort:action.currentCohort}
+    }
+    if(action.type === 'SELECTEDCOHORTNAME'){
+        return {...state, cohorts:action.selectedCohortName}
     }
     return state;
 }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
