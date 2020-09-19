@@ -12,7 +12,9 @@ function mapReduxStateToReactProps(state){
         treeData: state.treeData,
         isCohortInfo:state.isCohortInfo,
         heatData: state.heatData,
-        cohorts: state.cohorts
+        cohorts: state.cohorts,
+        currentCohort: state.currentCohort,
+        tempCohorts: state.tempCohorts
     }
 }
 function mapDispatchToProps(dispatch){

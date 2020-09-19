@@ -4,10 +4,10 @@ import MatrixFilterRoot from "./MatrixFilterRoot";
 
 export default class ErrorDetector extends Component{
     mapSelect(){
-        const { map, cohorts } = this.props
+        const { map, tempCohorts } = this.props
         let mapType = null;
-        let treemap = cohorts[0].parent;
-        let heatmap = cohorts[1].parent;
+        let treemap = tempCohorts[0].parent;
+        let heatmap = tempCohorts[1].parent;
         if (map === treemap){
             mapType = <TreemapRoot/>
         } else if (map === heatmap){

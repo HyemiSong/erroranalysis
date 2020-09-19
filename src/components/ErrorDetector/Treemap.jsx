@@ -8,6 +8,7 @@ const data = props.isNodeClicked;
 const treeData = props.treeData;
 const d3Transform = props.d3Transform;
 const cohorts = props.cohorts;
+const tempCohorts = props.tempCohorts;
 const cCohort = props.currentCohort;
 
 const [selectedCluster, setCluster] = useState(data);
@@ -19,9 +20,13 @@ const [currentCohort, setCurrentCohort] = useState(cCohort)
 const ref = useRef();
     useEffect(() => {
 
-        //change current cohort
-        setCurrentCohort(cohorts[0])
-        props.onChangeCurrentCohort(cohorts[0])
+        // change current cohort
+        // const _cohorts = cohorts;
+        // _cohorts[0] = {key:_cohorts[0].key, id:_cohorts[0].id, saved:_cohorts[0].saved, name:_cohorts[0].name + "-1", parent:_cohorts[0].parent, meta:_cohorts[0].meta, filter:_cohorts[0].filter, coverage: _cohorts[0].coverage, errorRate:_cohorts[0].errorRate, success:_cohorts[0].success, error:_cohorts[0].error, allsize:_cohorts[0].allsize}
+        setCurrentCohort(tempCohorts[0])
+        props.onChangeCurrentCohort(tempCohorts[0])
+
+        console.log(tempCohorts[0])
 
         //treemap setting
         let i = 0;
@@ -30,7 +35,7 @@ const ref = useRef();
         const root = d3.hierarchy(treeData);
         const dx = 60;
         const dy = 100;
-        const margin = {top:50, botton:50, left:50, right:50};
+        const margin = { top:50, botton:50, left:50, right:50 };
         const tree = d3.tree().nodeSize([dx, dy]);
         const radius = 25;
         let _transform ={};
@@ -58,8 +63,9 @@ const ref = useRef();
 
         function zoomed() {
                 g.attr("transform", d3.event.transform);
-                //.log(transform.k)
+                //console.log(transform)
                 _transform = d3.event.transform;
+                //console.log(_transform)
         }
 
         svgTree.call(zoom);
@@ -125,7 +131,7 @@ const ref = useRef();
             .attr("width", function(d){return radius * 2})
             .attr("y", function(d, i){return -10 + (radius-2*rectHeight(calHeight(d)))})
             .attr("height", function(d, i){return 2*rectHeight(radius)})
-            
+
         node
             .append("circle")
             .attr("class", "mask")
@@ -179,26 +185,31 @@ const ref = useRef();
                 const _success = d.data.success;
                 const _error = d.data.error;
                 const _filter = d.data.PredictionPath.split(",");
-                let _cohorts = [
-                        {id:0, name:cohorts[0].name, parent:'Treemap', meta:'metadata', filter:_filter, coverage: _coverage, errorRate: _errorRate, success:_success, error:_error},
-                        {id:1, name:cohorts[1].name, parent:'Heatmap', meta:'metadata', filter:_filter, coverage: 0, errorRate:0, success:0, error:0}
+                let _tempCohorts = [
+                        {id:0, saved:tempCohorts[0].name, name:tempCohorts[0].name, parent:'Treemap', meta:'metadata', filter:_filter, coverage: _coverage, errorRate: _errorRate, success:_success, error:_error},
+                        {id:1, saved:tempCohorts[1].name, name:tempCohorts[1].name, parent:'Heatmap', meta:'metadata', filter:_filter, coverage: 0, errorRate:0, success:0, error:0}
                     ]
                 let isClicked = (data === "false") ? "true" : "false";
-                clusterChange(isClicked, _data, _transform, _cohorts)
+                clusterChange(isClicked, _data, _transform, _tempCohorts)
             })
+            console.log(cCohort)
+            test(cCohort)
+    }, [data, treeData, d3Transform, tempCohorts, cCohort]);
 
-    }, [data, treeData, d3Transform, cohorts]);
-
-    function clusterChange(isClicked, _data, _transform, _cohorts){
+    function test(test){
+        return test
+    }
+    function clusterChange(isClicked, _data, _transform, _tempCohorts){
         setCluster(isClicked)
         setAncester(_data)
         setTransform(_transform)
-        setSelectedClusterInfo(_cohorts)
+        setSelectedClusterInfo(_tempCohorts)
         props.onClusterClick(isClicked)
         props.onChangeTreeData(_data)
         props.onChangeTransfrom(_transform)
-        props.onChangeCohortInfo(_cohorts)
+        props.onUpdateTempCohort(_tempCohorts)
     }
+ 
 return(
     <div>
     <div id="Treemap">
@@ -207,15 +218,15 @@ return(
         />
         <div className="overview absolute padding-sm txt-left">
             <div className="font-size-14 bold padding-left-xxsm margin-left-xxxsm">
-                Temporary Cohort: {cohorts[0].name}
+                {/* Cohort: {cCohort.name} */}
             </div>
-            <div className="flex-container">
+            <div className="flex-container padding-top-sm">
                 <div className="metric-area">
                     <div className="flex-container padding-xxsm">
                         <div id="metric-bar" className="black"></div>
                         <div className="padding-xxsm">
                             <div className="font-size-10 regular">Coverage (%)</div>
-                            <div className="font-size-28 bold">{cohorts[0].coverage}</div>
+                            <div className="font-size-28 bold">{tempCohorts[0].coverage}</div>
                         </div>
                     </div>
                 </div>
@@ -225,7 +236,7 @@ return(
                         </div>
                         <div className="padding-xxsm">
                             <div className="font-size-10 regular">Error rate (%)</div>
-                            <div className="font-size-28 bold datavis-7">{cohorts[0].errorRate}</div>
+                            <div className="font-size-28 bold datavis-7">{tempCohorts[0].errorRate}</div>
                         </div>
                     </div>
                 </div>
@@ -235,7 +246,7 @@ return(
                         <div className="padding-xxsm">
                             <div className="font-size-10 regular">Success (Num.)</div>
                             <div className="font-size-28 bold flex-container">
-                                <div className="datavis-1">{cohorts[0].success}</div>
+                                <div className="datavis-1">{tempCohorts[0].success}</div>
                                 <div>/{treeData.size}</div>
                             </div>
                         </div>
@@ -247,7 +258,7 @@ return(
                         <div className="padding-xxsm">
                             <div className="font-size-10 regular">Error (Num.)</div>
                             <div className="font-size-28 bold flex-container">
-                                <div className="datavis-7">{cohorts[0].error}</div>
+                                <div className="datavis-7">{tempCohorts[0].error}</div>
                                 <div>/{treeData.size}</div>
                             </div>
                         </div>
@@ -255,7 +266,6 @@ return(
                 </div>
             </div>
         </div>
-        </div>
     </div>
-)
-}
+</div>
+)}

@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 function mapReduxStateToReactProps(state){
     return {
         map:state.map,
-        cohorts:state.cohorts
+        tempCohorts:state.tempCohorts
     }
 }
 function mapDispatchToProps(dispatch){

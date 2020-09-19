@@ -15,7 +15,8 @@ function mapReduxStateToReactProps(state){
         cohortTitle:state.cohortTitle,
         initCohort:state.initCohort,
         cohorts:state.cohorts,
-        max_id:state.max_id
+        max_id:state.max_id,
+        currentCohort:state.currentCohort
     }
 }
 function mapDispatchToProps(dispatch){

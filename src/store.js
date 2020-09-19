@@ -14,8 +14,8 @@ export default createStore(function(state, action){
             treeData: FaceAPI(),
             heatData: heatData,
             selectedCellsArr:[],
-            currentCohort:{},
-            currentNode:{name:"All Data-1", children:[], level:0},
+            currentCohort:{key:0, id:0, saved:'All Data', name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
+            currentNode:{name:"All Data", children:[], level:0},
             isExplanation:false,
             isNodeClicked:false,
             isCohortInfo:false,
@@ -26,11 +26,15 @@ export default createStore(function(state, action){
             isWhatIf:false,
             d3Transform: {k:1, x:window.innerWidth/1.5, y:50},
             cohortTitle:[{detector:"Error Detector", explainer:"Explanation"}],
-            max_id:1,
+            max_id:2,
             cohorts:[
-                {key:0, id:0, name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
-                {key:1, id:1, name:'All Data-2', parent:'Heatmap', meta:'metadata', filter:'', coverage: 0, errorRate:0, success:0, error:0}
-            ]
+                {key:0, id:0, saved:'All Data', name:'All Data', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238}
+            ],
+            tempCohorts:[
+                {key:0, id:0, saved:'All Data', name:'All Data', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
+                {key:1, id:1, saved:'All Data', name:'All Data', parent:'Heatmap', meta:'metadata', filter:'', count: 1, coverage: 0, errorRate:0, success:0, error:0, allsize:1238}
+            ],
+            cohortEditTarget: ""
         }
     }
     if(action.type === 'INCREMENT'){
@@ -81,9 +85,9 @@ export default createStore(function(state, action){
     if(action.type === 'TRANSFORM'){
         return {...state, d3Transform:action.changeTransfrom}
     }
-    if(action.type === 'UPDATECOHORTINFO'){
-        return {...state, cohorts:action.updateCohorts}
-    }
+    // if(action.type === 'UPDATECOHORTINFO'){
+    //     return {...state, cohorts:action.updateCohorts}
+    // }
     if(action.type === 'LOCALLOADED'){
         return {...state, isLocalExplanation:action.loadedLocalEx}
     }
@@ -93,8 +97,11 @@ export default createStore(function(state, action){
     if(action.type === 'CURRENTCOHORT'){
         return {...state, currentCohort:action.currentCohort}
     }
-    if(action.type === 'SELECTEDCOHORTNAME'){
-        return {...state, cohorts:action.selectedCohortName}
+    if(action.type === 'SHIFTCOHORTEDITARTGET'){
+        return {...state, cohortEditTarget:action.cohortEditTarget}
+    }
+    if(action.type === 'UPDATETEMPCOHORT'){
+        return {...state, tempCohorts:action.updateTempCohorts}
     }
     return state;
 }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())

@@ -2,13 +2,18 @@ import React, {Component} from 'react';
 import { ActionButton, DefaultButton, Stack, PrimaryButton, IconButton } from 'office-ui-fabric-react';
 
 export default class AddCohort extends Component{
-    state = {name:this.props.cohorts[0].name + " Copy", filter:'', baseCohort:this.props.cohorts[0].name}
+    state = {
+        name:this.props.currentCohort.saved + " Copy",
+        filter:'',
+        baseCohort:this.props.currentCohort.saved
+    }
+
     render(){
         let allCohorts = [];
         const cohorts = this.props.cohorts;
-        allCohorts.push(
-            <option value="All data" key="default">All data</option>
-        )
+        // allCohorts.push(
+        //     <option value="All data" key="default">All data</option>
+        // )
         for(let i =0; i < cohorts.length; i++){
             allCohorts.push(
                 <option value={cohorts[i].name} key={cohorts[i].id}>{cohorts[i].name}</option>
@@ -49,9 +54,11 @@ export default class AddCohort extends Component{
                                 let _filter = this.state.filter;
                                 let maxID = this.props.max_id+1;
                                 let newCohorts = this.props.cohorts.concat();
+                                let _currentCohort = this.props.currentCohort;
                                 let clicked = false;
 
-                                newCohorts.push({key:maxID, id:maxID, name:_name, parent:null, meta:null, filter:_filter})
+                                newCohorts.push({key:newCohorts.length, id:newCohorts.length, name:_name, parent:_currentCohort.parent, meta:_currentCohort.meta, filter:_currentCohort.filter, coverage:_currentCohort.coverage, errorRate:_currentCohort.errorRate, success:_currentCohort.success, error:_currentCohort.error, allsize:_currentCohort.allsize})
+
                                 this.props.onSubmitCohort(newCohorts);
                                 this.props.onSubmitMaxID(maxID);
                                 this.props.onCloseAddCohort(clicked);
@@ -122,10 +129,12 @@ export default class AddCohort extends Component{
                                         </select>
                                     </div>
                                 </div>
+
                                 <div className="bottom fixed padding-bottom-sm">
                                     <Stack horizontal tokens={stackTokens}>
                                         <DefaultButton text="Cancel" onClick=
                                             {function(e){
+                                                e.preventDefault();
                                                 let _clicked = false;
                                                 this.props.onCloseAddCohort(_clicked);
                                             }.bind(this)}

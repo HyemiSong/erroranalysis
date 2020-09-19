@@ -3,20 +3,25 @@ import '../../UI.css';
 import ErrorDetectorRoot from "../ErrorDetector/ErrorDetectorRoot";
 import TopbarRoot from "../Topbar/TopbarRoot";
 import ExplanationRoot from "../Explanation/ExplanationRoot";
-import NotebookTab from "../../image/NotebookTop.png"
+import NotebookTab from "../../image/NotebookTop.png";
+import SubTopbarRoot from "../Topbar/SubTopbarRoot";
 
 class Notebook extends Component {
   loadView(){
     const{ isExplanation } = this.props;
     //console.log(isExplanation)
     let view = null;
+    let subTBView = null;
     if(isExplanation === false || isExplanation === undefined){
       view = <ErrorDetectorRoot></ErrorDetectorRoot>
+      subTBView = <SubTopbarRoot></SubTopbarRoot>
     }else if(isExplanation === true){
       view = <ExplanationRoot></ExplanationRoot>
+      subTBView = null;
     }
-    return view
+    return {view:view, subTBView:subTBView}
   }
+
   render(){
     return (
         <div className="Window relative">
@@ -28,7 +33,8 @@ class Notebook extends Component {
                   <TopbarRoot></TopbarRoot>
                 </div>
                 <div className="viewArea">
-                  {this.loadView()}
+                  {this.loadView().view}
+                  {this.loadView().subTBView}
                 </div>
               </div>
             </div>

@@ -45,7 +45,8 @@ export default class Topbar extends Component{
         const bulletedListIcon = { iconName: 'BulletedList' };
         const settingsIcon = { iconName: 'Settings' };
         const cohortInfoIcon = { iconName: 'Info' };
-        const{ isExplanation, isLocalExplanation } = this.props;
+        const{ isExplanation, isLocalExplanation, currentCohort } = this.props;
+        //console.log(currentCohort)
        
         const viewExplanation =
             <div className="padding-top-xxsm padding-left-xsm ">
@@ -99,7 +100,8 @@ export default class Topbar extends Component{
                 <select name="maps" id="maps" value={this.props.map} 
                     onChange={function(e){
                         this.props.onChangeMap(e.target.value)
-                    }.bind(this)}>
+                    }.bind(this)}
+                    >
                     <option value="Treemap">Tree map</option>
                     <option value="Heatmap">Heat map</option>
                 </select>
@@ -115,7 +117,7 @@ export default class Topbar extends Component{
             mapSelectorBTN = mapSelector;
 
         }else if(isExplanation === true){
-            title = this.props.cohortTitle[0].explainer + ":" + " " + this.props.currentCohort.name;
+            title = this.props.cohortTitle[0].explainer + ":" + " " + currentCohort.name;
             explainBTN = null;
             backBTN = backToDetector;
             featureListBTN = null;
@@ -140,8 +142,10 @@ export default class Topbar extends Component{
                         {mapSelectorBTN}
                     </div>
                     <div className="input absolute right flex-container padding-xsm">
-                        {whatIfPanelBTN}
-                        {featureListBTN}
+                        <div className="padding-right-xsm">
+                            {whatIfPanelBTN}
+                            {featureListBTN}
+                        </div>
                         <div className="padding-right-xsm">
                             <ActionButton text="Cohort Setting" onClick={
                                 function(e){

@@ -16,7 +16,8 @@ function mapReduxStateToReactProps(state){
         max_id:state.max_id,
         currentCohort:state.currentCohort,
         isExplanation:state.isExplanation,
-        selectedCohortName:state.selectedCohortName
+        cohortEditTarget:state.cohortEditTarget,
+        tempCohorts:state.tempCohorts
     }
 }
 function mapDispatchToProps(dispatch){
@@ -33,8 +34,17 @@ function mapDispatchToProps(dispatch){
         onChangeMap:function(e){
             dispatch({type:'MAP', selectedMap:e})
         },
-        onChangeCohortName:function(e){
-            dispatch({type:'SELECTEDCOHORTNAME', selectedCohortName:e})
+        onCurrentCohort:function(e){
+            dispatch({type:'CURRENTCOHORT', currentCohort:e})
+        },
+        onCohortEditTarget:function(e){
+            dispatch({type:'SHIFTCOHORTEDITARTGET', cohortEditTarget:e})
+        },
+        onUpdateTempCohort:function(e){
+            dispatch({type:'UPDATETEMPCOHORT', updateTempCohorts:e})
+        },
+        onChangeCurrentCohort:function(e){
+            dispatch({type:'CURRENTCOHORT', currentCohort:e})
         }
     }
 }

@@ -16,7 +16,8 @@ function mapReduxStateToReactProps(state){
         currentCohort:state.currentCohort,
         cohorts:state.cohorts,
         isLocalExplanation:state.isLocalExplanation,
-        isWhatIf:state.isWhatIf
+        isWhatIf:state.isWhatIf,
+        tempCohorts:state.tempCohorts
     }
 }
 function mapDispatchToProps(dispatch){
