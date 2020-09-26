@@ -41,9 +41,6 @@ export default class ManageCohort extends Component{
         let cohorts = this.props.cohorts;
         let tempCohorts = this.props.tempCohorts
 
-console.log(this.state.baseCohort)
-console.log(tempCohorts)
-
         for(let i=0; i<2; i++){
             tempCohortArr.push(
                 <li key={tempCohorts[i].id}>
@@ -61,7 +58,7 @@ console.log(tempCohorts)
             )
         }
         return(
-            <div className="panel panel-fabric dropshadow-sm fixed top-100 right white_bg margine-right-15px">
+            <div className="panel panel-md dropshadow-sm fixed top-170 right white_bg margine-right-15px">
                 <div className="flex-container panel-top">
                     <div className="font-size-18 padding-sm semibold absolute">
                         Cohort Settings
@@ -105,117 +102,117 @@ console.log(tempCohorts)
                             </div>
                         </div>
                     </div>
-                        <div className="input padding-left-sm">
-                                <div className="sub-inner-section padding-top-xsm padding-bottom-sm">
-                                    <div className="font-size-12 text-grey">
-                                        Saved Cohorts
-                                    </div>
-                                    <nav className="font-size-14 flex-container">
-                                        <select className="dropDown-lg" name="savedCohort" id="savedCohort" value={this.props._cohortEditTarget}
-                                                onChange={function(e){
-                                                    this.props.onCohortEditTarget(e.target.value)
-                                                }.bind(this)}>
-                                            {savedCohortArr}
-                                        </select>
-                                        <div className="margin-left-auto padding-right-xsm">
-                                            <IconButton
-                                                iconProps={moreIcon} title="More" ariaLabel="More" disabled={disabled} checked={checked} 
-                                            />
-                                        </div>
-                                    </nav>
-                                </div>
-                              </div>
+                    <div className="input padding-left-sm">
+                        <div className="sub-inner-section padding-top-xsm padding-bottom-sm">
+                            <div className="font-size-12 text-grey">
+                                Cohort list
                             </div>
-
-                 <div className="section">
-                        <div className="border-header">
-                            <div className="flex-container">
-                                <div className="font-size-14 bold padding-left-sm padding-top-xsm padding-bottom-xsm">
-                                    Cohort Shift
-                                </div>
-                                <div className="margin-left-auto padding-right-xsm padding-top-xxsm">
+                            <nav className="font-size-14 flex-container">
+                                <select className="dropDown-lg" name="savedCohort" id="savedCohort" value={this.props._cohortEditTarget}
+                                        onChange={function(e){
+                                            this.props.onCohortEditTarget(e.target.value)
+                                        }.bind(this)}>
+                                    {savedCohortArr}
+                                </select>
+                                <div className="margin-left-auto padding-right-xsm">
                                     <IconButton
-                                        iconProps={chevronDownIcon} title="Chevron" ariaLabel="Chevron" disabled={disabled} checked={checked} 
+                                        iconProps={moreIcon} title="More" ariaLabel="More" disabled={disabled} checked={checked} 
                                     />
                                 </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="section">
+                    <div className="border-header">
+                        <div className="flex-container">
+                            <div className="font-size-14 bold padding-left-sm padding-top-xsm padding-bottom-xsm">
+                                Cohort Shift
+                            </div>
+                            <div className="margin-left-auto padding-right-xsm padding-top-xxsm">
+                                <IconButton
+                                    iconProps={chevronDownIcon} title="Chevron" ariaLabel="Chevron" disabled={disabled} checked={checked} 
+                                />
                             </div>
                         </div>
-                        <div className="input padding-left-sm">
-                                <form onSubmit={function(e){
-                                    e.preventDefault();
-                                    let _clicked = false;
-                                    let index = (currentCohort.parent === "Treemap") ? 0 : 1;
-                                    let checkBox_Boolean = this.state.returnToDetector;
-                                    this.props.onCloseManageCohort(_clicked);
+                    </div>
+                    <div className="input padding-left-sm">
+                            <form onSubmit={function(e){
+                                e.preventDefault();
+                                let _clicked = false;
+                                let index = (currentCohort.parent === "Treemap") ? 0 : 1;
+                                let checkBox_Boolean = this.state.returnToDetector;
+                                this.props.onCloseManageCohort(_clicked);
 
-                                    if(checkBox_Boolean === true &&
-                                        currentCohort.parent === "Treemap"){
-                                        this.props.onClickExplanation(_clicked);
-                                        this.props.onChangeMap(this.props.cohorts[0].parent)
-                                    }
-                                    if(checkBox_Boolean === true &&
-                                        currentCohort.parent === "Heatmap"){
-                                        this.props.onClickExplanation(_clicked);
-                                        this.props.onChangeMap(this.props.cohorts[0].parent)
-                                    }
-                                    for(let i = 0; i < 2; i++){
-                                        let cohortName = this.state.baseCohort + "-" + Number(i+1)
-                                        tempCohorts[i] = {key:tempCohorts[i].key, id:tempCohorts[i].id, saved:this.state.baseCohort, name:cohortName, parent:tempCohorts[i].parent, meta:tempCohorts[i].meta, filter:tempCohorts[i].filter, coverage: tempCohorts[i].coverage, errorRate:tempCohorts[i].errorRate, success:tempCohorts[i].success, error:tempCohorts[i].error, allsize:tempCohorts[i].allsize}
-                                    }
-                                    const _currentCohort = this.props.currentCohort;
-                                        Object.assign(this.props.currentCohort,
-                                                        {key:_currentCohort.key, id:_currentCohort.id, saved:this.state.baseCohort, name:this.state.baseCohort + "-" + Number(index+1), parent:_currentCohort.parent, meta:_currentCohort.meta, filter:_currentCohort.filter, coverage:_currentCohort.coverage, errorRate:_currentCohort.errorRate, success:_currentCohort.success, error:_currentCohort.error, allsize:_currentCohort.allsize}
-                                    )
-                                    this.props.onUpdateTempCohort(tempCohorts)
-                                    this.props.onChangeCurrentCohort(_currentCohort)
-                                }.bind(this)}>
+                                if(checkBox_Boolean === true &&
+                                    currentCohort.parent === "Treemap"){
+                                    this.props.onClickExplanation(_clicked);
+                                    this.props.onChangeMap(this.props.cohorts[0].parent)
+                                }
+                                if(checkBox_Boolean === true &&
+                                    currentCohort.parent === "Heatmap"){
+                                    this.props.onClickExplanation(_clicked);
+                                    this.props.onChangeMap(this.props.cohorts[0].parent)
+                                }
+                                for(let i = 0; i < 2; i++){
+                                    let cohortName = this.state.baseCohort + "-" + Number(i+1)
+                                    tempCohorts[i] = {key:tempCohorts[i].key, id:tempCohorts[i].id, saved:this.state.baseCohort, name:cohortName, parent:tempCohorts[i].parent, meta:tempCohorts[i].meta, filter:tempCohorts[i].filter, coverage: tempCohorts[i].coverage, errorRate:tempCohorts[i].errorRate, success:tempCohorts[i].success, error:tempCohorts[i].error, allsize:tempCohorts[i].allsize}
+                                }
+                                const _currentCohort = this.props.currentCohort;
+                                    Object.assign(this.props.currentCohort,
+                                                    {key:_currentCohort.key, id:_currentCohort.id, saved:this.state.baseCohort, name:this.state.baseCohort + "-" + Number(index+1), parent:_currentCohort.parent, meta:_currentCohort.meta, filter:_currentCohort.filter, coverage:_currentCohort.coverage, errorRate:_currentCohort.errorRate, success:_currentCohort.success, error:_currentCohort.error, allsize:_currentCohort.allsize}
+                                )
+                                this.props.onUpdateTempCohort(tempCohorts)
+                                this.props.onChangeCurrentCohort(_currentCohort)
+                            }.bind(this)}>
 
-                                <div className="sub-inner-section padding-top-xsm">
-                                    <div className="font-size-12 text-grey">
-                                        Saved Cohorts
+                            <div className="sub-inner-section padding-top-xsm">
+                                <div className="font-size-12 text-grey">
+                                    Cohort list
+                                </div>
+                                <nav className="font-size-14 flex-container">
+                                    <select className="dropDown-lg" name="savedCohort" id="savedCohort" value={this.state.baseCohort}
+                                            onChange={function(e){
+                                                this.setState({baseCohort: e.target.value});
+                                            }.bind(this)}>
+                                        {savedCohortArr}
+                                    </select>
+                                    <div className="margin-left-auto padding-right-xsm">
+                                        <IconButton
+                                            iconProps={cohortInfoIcon} title="Info" ariaLabel="Info" disabled={disabled} checked={checked} 
+                                        />
                                     </div>
-                                    <nav className="font-size-14 flex-container">
-                                        <select className="dropDown-lg" name="savedCohort" id="savedCohort" value={this.state.baseCohort}
-                                                onChange={function(e){
-                                                    this.setState({baseCohort: e.target.value});
-                                                }.bind(this)}>
-                                            {savedCohortArr}
-                                        </select>
-                                        <div className="margin-left-auto padding-right-xsm">
-                                            <IconButton
-                                                iconProps={cohortInfoIcon} title="Info" ariaLabel="Info" disabled={disabled} checked={checked} 
-                                            />
-                                        </div>
-                                    </nav>
+                                </nav>
+                            </div>
+                            <div className="sub-inner-section padding-top-xsm padding-bottom-xsm">
+                                <div className="font-size-12 text-grey">
+                                    Graphs
                                 </div>
-                                <div className="sub-inner-section padding-top-xsm padding-bottom-xsm">
-                                    <div className="font-size-12 text-grey">
-                                        Temporary cohorts
-                                    </div>
-                                    <nav className="font-size-14">
-                                        <ul>
-                                        {tempCohortArr}
-                                        </ul>
-                                    </nav>
-                                </div>
-                                <div className="bottom padding-bottom-md margin-top-sm">
-                                    <Checkbox label="Return to the Error Detector" onChange=
-                                        {function(e){
-                                            let boolean = this.state.returnToDetector;
-                                            let isChecked = (boolean === false) ? true : false;
-                                            this.setState({returnToDetector:isChecked})
-                                        }.bind(this)}
-                                        disabled={this.state.disabled}
-                                    />
-                                    <div className="margin-top-xsm"></div>
-                                    <input type="submit" value="Apply" className="primaryButton"/>
-                                </div>
-                             </form>
-                          </div>
-                      </div>
-                    {this.createCohort()}
+                                <nav className="font-size-14">
+                                    <ul>
+                                    {tempCohortArr}
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div className="bottom padding-bottom-md margin-top-sm">
+                                <Checkbox label="Return to the Error Detector" onChange=
+                                    {function(e){
+                                        let boolean = this.state.returnToDetector;
+                                        let isChecked = (boolean === false) ? true : false;
+                                        this.setState({returnToDetector:isChecked})
+                                    }.bind(this)}
+                                    disabled={this.state.disabled}
+                                />
+                                <div className="margin-top-xsm"></div>
+                                <input type="submit" value="Apply" className="primaryButton"/>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-           </div>
+                {this.createCohort()}
+            </div>
+        </div>
         )
     }
 }

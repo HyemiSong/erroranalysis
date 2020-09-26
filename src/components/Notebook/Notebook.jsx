@@ -9,7 +9,6 @@ import SubTopbarRoot from "../Topbar/SubTopbarRoot";
 class Notebook extends Component {
   loadView(){
     const{ isExplanation } = this.props;
-    //console.log(isExplanation)
     let view = null;
     let subTBView = null;
     if(isExplanation === false || isExplanation === undefined){

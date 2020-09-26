@@ -7,11 +7,11 @@
 }
 .panel-fabric{
     width:320px;
-    height:77%;
+    height:76.4%;
 }
 .panel-md{
     width:280px;
-    height:76.3%;
+    height:76.4%;
 }
 .panel-md-height{
     height:90%;
@@ -30,9 +30,9 @@
     display: flex;
 }
 .subTopbar{
-    width:50%;
+    width:90%;
     height:37px;
-    z-index: 30;
+    z-index: 1;
     display: flex;
 }
 ul{
@@ -95,6 +95,9 @@ select{
 .dropDown-lg{
     width:70%;
 }
+.btn{
+    cursor: pointer;
+}
 /* margin */
 .marginBotton_md{
     margin-bottom: 20px;
@@ -110,6 +113,9 @@ select{
 }
 .margin-left-xxxsm{
     margin-left:3px;
+}
+.margin-right-sm{
+    margin-right:20px;
 }
 .margin-right-xsm{
     margin-right:10px;
@@ -163,6 +169,12 @@ select{
 }
 .padding-xxsm{
     padding: 5px;
+}
+.padding-top-xlg{
+    padding-top:160px;
+}
+.padding-top-lg{
+    padding-top:80px;
 }
 .padding-top-md{
     padding-top:40px;
@@ -311,10 +323,13 @@ select{
     top:180px;
 }
 .top-170{
-    top:170px;
+    top:169px;
 }
 .top-130{
     top:130px;
+}
+.top-100{
+    top:100px;
 }
 .top-50{
     top:50px;
@@ -410,6 +425,9 @@ select{
 .text-grey{
    color:grey
 }
+.fabric-primary-blue{
+    color:#0078D4
+ }
 .txt-left{
     text-align: left;
 }

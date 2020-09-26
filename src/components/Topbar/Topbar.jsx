@@ -46,7 +46,6 @@ export default class Topbar extends Component{
         const settingsIcon = { iconName: 'Settings' };
         const cohortInfoIcon = { iconName: 'Info' };
         const{ isExplanation, isLocalExplanation, currentCohort } = this.props;
-        //console.log(currentCohort)
        
         const viewExplanation =
             <div className="padding-top-xxsm padding-left-xsm ">
@@ -81,6 +80,9 @@ export default class Topbar extends Component{
                 <ActionButton text="What-If" onClick={
                     function(e){
                         let _clicked = true;
+                        let _unclicked = false;
+                        this.props.onClickManageCohort(_unclicked);
+                        this.props.onClickCohortInfo(_unclicked)
                         this.props.onWhatIfClick(_clicked);
                     }.bind(this)
                 } iconProps={bulletedListIcon} allowDisabledFocus disabled={disabled} checked={checked} />
@@ -88,15 +90,6 @@ export default class Topbar extends Component{
 
         const mapSelector =
             <div className="input padding-left-xsm">
-                {/* <Dropdown
-                placeholder="Select an option"
-                label="Basic uncontrolled example"
-                options={options}
-                styles={dropdownStyles}
-                onChange={function(e){
-                    this.props.onChange(e.target.value)
-                }.bind(this)} /> */}
-
                 <select name="maps" id="maps" value={this.props.map} 
                     onChange={function(e){
                         this.props.onChangeMap(e.target.value)
@@ -131,7 +124,6 @@ export default class Topbar extends Component{
         return(
             <div>
                 <div className="breadcrumb font-size-12 flex-container margin-top-xxsm">
-                   {/* <div className="padding-left-xsm">Error Detector</div> */}
                    <div>{backBTN}</div>
                 </div>
                 <div className="topbar margine-left-1px border white_bg relative">
@@ -150,7 +142,9 @@ export default class Topbar extends Component{
                             <ActionButton text="Cohort Setting" onClick={
                                 function(e){
                                     let _clicked = true;
+                                    let _unclicked = false;
                                     this.props.onClickManageCohort(_clicked);
+                                    this.props.onClickCohortInfo(_unclicked)
                                 }.bind(this)
                             } iconProps={settingsIcon} allowDisabledFocus disabled={disabled} checked={checked} />
                         </div>
@@ -158,6 +152,8 @@ export default class Topbar extends Component{
                             <ActionButton text="Cohort Info" onClick={
                                 function(e){
                                     let _clicked = true;
+                                    let _unclicked = false;
+                                    this.props.onClickManageCohort(_unclicked);
                                     this.props.onClickCohortInfo(_clicked)
                                 }.bind(this)
                             } iconProps={cohortInfoIcon} allowDisabledFocus disabled={disabled} checked={checked} />

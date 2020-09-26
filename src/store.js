@@ -1,18 +1,19 @@
 import {createStore} from 'redux';
 import Data from './data/FaceAPI_azure_error_nodetection_extended_small_mlads.json'
 import { treeData, treeData2, heatData } from './data/treedata';
-import FaceAPI from './FaceAPI'
+import Tree_FaceAPI from './data/Tree_FaceAPI';
+import Heat_FaceAPI from './data/Heat_FaceAPI';
 
 export default createStore(function(state, action){
     console.log(state, action)
-    // console.log(FaceAPI())
+    //console.log(Heat_FaceAPI())
     if(state === undefined){
         return{
             number:0,
             map:"Treemap",
             data: Data,
-            treeData: FaceAPI(),
-            heatData: heatData,
+            treeData: Tree_FaceAPI(),
+            heatData: Heat_FaceAPI(),
             selectedCellsArr:[],
             currentCohort:{key:0, id:0, saved:'All Data', name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
             currentNode:{name:"All Data", children:[], level:0},
@@ -31,8 +32,8 @@ export default createStore(function(state, action){
                 {key:0, id:0, saved:'All Data', name:'All Data', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238}
             ],
             tempCohorts:[
-                {key:0, id:0, saved:'All Data', name:'All Data', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
-                {key:1, id:1, saved:'All Data', name:'All Data', parent:'Heatmap', meta:'metadata', filter:'', count: 1, coverage: 0, errorRate:0, success:0, error:0, allsize:1238}
+                {key:0, id:0, saved:'All Data', name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
+                {key:1, id:1, saved:'All Data', name:'All Data-2', parent:'Heatmap', meta:'metadata', filter:'', count: 1, coverage: 0, errorRate:0, success:0, error:0, allsize:1238}
             ],
             cohortEditTarget: ""
         }

@@ -20,13 +20,8 @@ const [currentCohort, setCurrentCohort] = useState(cCohort)
 const ref = useRef();
     useEffect(() => {
 
-        // change current cohort
-        // const _cohorts = cohorts;
-        // _cohorts[0] = {key:_cohorts[0].key, id:_cohorts[0].id, saved:_cohorts[0].saved, name:_cohorts[0].name + "-1", parent:_cohorts[0].parent, meta:_cohorts[0].meta, filter:_cohorts[0].filter, coverage: _cohorts[0].coverage, errorRate:_cohorts[0].errorRate, success:_cohorts[0].success, error:_cohorts[0].error, allsize:_cohorts[0].allsize}
         setCurrentCohort(tempCohorts[0])
         props.onChangeCurrentCohort(tempCohorts[0])
-
-        console.log(tempCohorts[0])
 
         //treemap setting
         let i = 0;
@@ -192,7 +187,7 @@ const ref = useRef();
                 let isClicked = (data === "false") ? "true" : "false";
                 clusterChange(isClicked, _data, _transform, _tempCohorts)
             })
-            console.log(cCohort)
+            //console.log(cCohort)
             test(cCohort)
     }, [data, treeData, d3Transform, tempCohorts, cCohort]);
 
@@ -213,13 +208,8 @@ const ref = useRef();
 return(
     <div>
     <div id="Treemap">
-        <svg className="absolute"
-            ref={ref}
-        />
+        <svg className="absolute" ref={ref} />
         <div className="overview absolute padding-sm txt-left">
-            <div className="font-size-14 bold padding-left-xxsm margin-left-xxxsm">
-                {/* Cohort: {cCohort.name} */}
-            </div>
             <div className="flex-container padding-top-sm">
                 <div className="metric-area">
                     <div className="flex-container padding-xxsm">

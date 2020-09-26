@@ -20,7 +20,7 @@ export default class CohortOverview extends Component{
         const { disabled, checked } = this.props;
 
         return(
-            <div className="panel panel-md dropshadow-sm fixed top-100 right white_bg margine-right-15px">
+            <div className="panel panel-md dropshadow-sm fixed top-170 right white_bg margine-right-15px">
                 <div className="flex-container panel-top">
                     <div className="font-size-18 padding-sm semibold absolute">
                     Cohort Information
