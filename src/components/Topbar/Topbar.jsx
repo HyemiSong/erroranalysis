@@ -144,7 +144,8 @@ export default class Topbar extends Component{
                                     let _clicked = true;
                                     let _unclicked = false;
                                     this.props.onClickManageCohort(_clicked);
-                                    this.props.onClickCohortInfo(_unclicked)
+                                    this.props.onClickCohortInfo(_unclicked);
+                                    this.props.onWhatIfClick(_unclicked);
                                 }.bind(this)
                             } iconProps={settingsIcon} allowDisabledFocus disabled={disabled} checked={checked} />
                         </div>
@@ -154,7 +155,8 @@ export default class Topbar extends Component{
                                     let _clicked = true;
                                     let _unclicked = false;
                                     this.props.onClickManageCohort(_unclicked);
-                                    this.props.onClickCohortInfo(_clicked)
+                                    this.props.onClickCohortInfo(_clicked);
+                                    this.props.onWhatIfClick(_unclicked);
                                 }.bind(this)
                             } iconProps={cohortInfoIcon} allowDisabledFocus disabled={disabled} checked={checked} />
                         </div>

@@ -84,7 +84,8 @@ const ref = useRef();
             .append("path")
             .attr("fill", "none")
             // .attr("stroke", "#E1E1E1")
-            .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? nodeColor(((d.target.data.error/d.source.data.size) * 100).toFixed(1)) : "#E1E1E1"})
+            //.attr("stroke", function(d) { return (d.target.data.ancestor === true) ? nodeColor(((d.target.data.error/d.source.data.size) * 100).toFixed(1)) : "#E1E1E1"})
+            .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? "#00A2AD" : "#E1E1E1"})
             .attr( "d", d3.linkVertical().x(d => d.x).y(d => d.y))
             .attr("stroke-width", d => d.source.data.size*0.02)
             // .attr("fake", d=> console.log(d.source.data.size));
