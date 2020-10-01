@@ -71,7 +71,7 @@ const ref = useRef();
             .selectAll("path")
             .data(root.links())
             .enter()
-            
+
         const node = g
             .append("g")
             .selectAll("g")
@@ -79,7 +79,7 @@ const ref = useRef();
             .enter()
             .append("g")
             .attr("transform", d => `translate(${d.x},${d.y})`)
-        
+
         link
             .append("path")
             .attr("fill", "none")

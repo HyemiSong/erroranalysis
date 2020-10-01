@@ -8,17 +8,21 @@ function mapReduxStateToReactProps(state){
         data:state.data,
         color:state.color,
         isNodeClicked:state.isNodeClicked,
-        selectedCellsArr:state.selectedCellsArr,
         treeData: state.treeData,
         isCohortInfo:state.isCohortInfo,
         heatData: state.heatData,
         cohorts: state.cohorts,
         currentCohort: state.currentCohort,
-        tempCohorts: state.tempCohorts
+        tempCohorts: state.tempCohorts,
+        selectedCellsArr:state.selectedCellsArr,
+        selectedCellsErrRate: state.selectedCellsErrRate
     }
 }
 function mapDispatchToProps(dispatch){
     return{
+        onCellClickErr:function(ele){
+            dispatch({type:'CELLCLICKERR', selectedCellsErrRate:ele})
+        },
         onCellClick:function(ele){
             dispatch({type:'CELLCLICKED', selectedCellsArr:ele})
         },

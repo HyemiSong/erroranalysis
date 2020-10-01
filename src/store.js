@@ -15,6 +15,7 @@ export default createStore(function(state, action){
             treeData: Tree_FaceAPI(),
             heatData: Heat_FaceAPI(),
             selectedCellsArr:[],
+            selectedCellsErrRate: 1.7,
             currentCohort:{key:0, id:0, saved:'All Data', name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
             currentNode:{name:"All Data", children:[], level:0},
             isExplanation:false,
@@ -46,6 +47,9 @@ export default createStore(function(state, action){
     }
     if(action.type === 'CELLCLICKED'){
         return {...state, selectedCellsArr:action.selectedCellsArr}
+    }
+    if(action.type === 'CELLCLICKERR'){ 
+        return {...state, selectedCellsErrRate:action.selectedCellsErrRate}
     }
     if(action.type === 'NODECLICKED'){
         return {...state, isNodeClicked:action.selectedNode}
