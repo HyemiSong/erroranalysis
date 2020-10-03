@@ -5,7 +5,7 @@ import ErrorRateImg from '../../image/errorrate.png';
 
 export default class CohortOverview extends Component{
     tempCohort(){
-        const { map } = this.props
+        const { map, tempCohorts } = this.props;
 
         let tempCohort = null;
         if (map === "Treemap"){
@@ -13,10 +13,11 @@ export default class CohortOverview extends Component{
         } else if (map === "Matrixfilter"){
             //tempCohort = "test"
         }
-        return {coverage:this.props.cohorts[0].coverage, errorRate:this.props.cohorts[0].errorRate}
+        return {coverage:tempCohorts[0].coverage, errorRate:tempCohorts[0].errorRate}
     }
     render(){          
         const chromeCloseIcon = { iconName: 'ChromeClose'};
+        const saveIcon = { iconName: 'Save' };
         const { disabled, checked } = this.props;
 
         return(
@@ -41,8 +42,24 @@ export default class CohortOverview extends Component{
                         <div className="font-size-14 bold">
                             Current cohort
                         </div>
+                            <div>
+                                {this.props.currentCohort.name} ({this.props.map})
+                            </div>
                         <div>
-                            {this.props.currentCohort.name} ({this.props.map})
+                            <div className="font-size-12 fabric-primary-blue btn flex-container">
+                                <div className="removing-btn-margin-left">
+                                <IconButton 
+                                    onClick={function(e){
+                                        let _clicked = false;
+                                        this.props.onCloseManageCohort(_clicked);
+                                    }.bind(this)}
+                                    iconProps={saveIcon} title="Close" ariaLabel="Close" disabled={disabled} checked={checked} 
+                                />
+                                </div>
+                                <div className="padding-top-xxsm">
+                                    Save to the cohort list
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

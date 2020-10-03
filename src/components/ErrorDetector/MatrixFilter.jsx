@@ -135,7 +135,7 @@ export default function MatrixFilter(props){
                     return a + b
                 }, 0)
 
-                let errorRate = (errSum/dataSum) * 100;
+                let errorRate = ((errSum/dataSum) * 100).toFixed(2);
                 let result = (_clickedCells.length === 0 || errorRate === "NaN") ? 1.7 : errorRate;
                 setSelectedCellsErr(result);
                 props.onCellClickErr(result);
@@ -152,6 +152,7 @@ export default function MatrixFilter(props){
                 nodeStateChange(updatedData)
                 setClickedCells(_clickedCells)
                 props.onCellClick(_clickedCells)
+                props.onClickCohortInfo(true)
 
                 //cell color
                 d3.selectAll(".cell")
@@ -187,7 +188,7 @@ export default function MatrixFilter(props){
                                 <div className="flex-container padding-xxsm">
                                     <div id="metric-bar" className="black"></div>
                                     <div className="padding-xxsm">
-                                        <div className="font-size-10 regular">Selected Cells</div>
+                                        <div className="font-size-10 regular">Error coverate (%)</div>
                                         <div className="font-size-28 bold">{selectedCellsArr.length}</div>
                                     </div>
                                 </div>
@@ -202,11 +203,11 @@ export default function MatrixFilter(props){
                                     </div>
                                 </div>
                             </div>
-                            <div className="metric-area">
+                            {/* <div className="metric-area">
                                 <div className="flex-container padding-xxsm">
                                 <div id="metric-bar" className="datavis-1-bg"></div>
                                     <div className="padding-xxsm">
-                                        <div className="font-size-10 regular">Success (Num.)</div>
+                                        <div className="font-size-10 regular">Correct (Num.)</div>
                                         <div className="font-size-28 bold flex-container">
                                             <div className="datavis-1">{cohorts[0].success}</div>
                                             <div>/{treeData.size}</div>
@@ -218,14 +219,14 @@ export default function MatrixFilter(props){
                                 <div className="flex-container padding-xxsm">
                                     <div id="metric-bar" className="datavis-7-bg"></div>
                                     <div className="padding-xxsm">
-                                        <div className="font-size-10 regular">Error (Num.)</div>
+                                        <div className="font-size-10 regular">Incurrect (Num.)</div>
                                         <div className="font-size-28 bold flex-container">
                                             <div className="datavis-7">{cohorts[0].error}</div>
                                             <div>/{treeData.size}</div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="padding-left-sm padding-top-xlg">

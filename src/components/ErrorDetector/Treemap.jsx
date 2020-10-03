@@ -176,8 +176,8 @@ const ref = useRef();
                 setAncestors(_data)
                 
                 //metrix of clicked node
-                const _coverage = ((d.data.error/treeData.size) * 100).toFixed(1);
-                const _errorRate = ((d.data.error/d.data.size) * 100).toFixed(1);
+                const _coverage = ((d.data.error/treeData.size) * 100).toFixed(2);
+                const _errorRate = ((d.data.error/d.data.size) * 100).toFixed(2);
                 const _success = d.data.success;
                 const _error = d.data.error;
                 const _filter = d.data.PredictionPath.split(",");
@@ -204,6 +204,7 @@ const ref = useRef();
         props.onChangeTreeData(_data)
         props.onChangeTransfrom(_transform)
         props.onUpdateTempCohort(_tempCohorts)
+        props.onClickCohortInfo(true)
     }
  
 return(
@@ -216,7 +217,7 @@ return(
                     <div className="flex-container padding-xxsm">
                         <div id="metric-bar" className="black"></div>
                         <div className="padding-xxsm">
-                            <div className="font-size-10 regular">Coverage (%)</div>
+                            <div className="font-size-10 regular">Error coverage (%)</div>
                             <div className="font-size-28 bold">{tempCohorts[0].coverage}</div>
                         </div>
                     </div>
@@ -231,11 +232,11 @@ return(
                         </div>
                     </div>
                 </div>
-                <div className="metric-area">
+                {/* <div className="metric-area">
                     <div className="flex-container padding-xxsm">
                        <div id="metric-bar" className="datavis-1-bg"></div>
                         <div className="padding-xxsm">
-                            <div className="font-size-10 regular">Success (Num.)</div>
+                            <div className="font-size-10 regular">Currect (Num.)</div>
                             <div className="font-size-28 bold flex-container">
                                 <div className="datavis-1">{tempCohorts[0].success}</div>
                                 <div>/{treeData.size}</div>
@@ -247,14 +248,14 @@ return(
                     <div className="flex-container padding-xxsm">
                         <div id="metric-bar" className="datavis-7-bg"></div>
                         <div className="padding-xxsm">
-                            <div className="font-size-10 regular">Error (Num.)</div>
+                            <div className="font-size-10 regular">Incurrect (Num.)</div>
                             <div className="font-size-28 bold flex-container">
                                 <div className="datavis-7">{tempCohorts[0].error}</div>
                                 <div>/{treeData.size}</div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     </div>
