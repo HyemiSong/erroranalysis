@@ -34,6 +34,9 @@ function mapDispatchToProps(dispatch){
         },
         onChangeCurrentCohort:function(e){
             dispatch({type:'CURRENTCOHORT', currentCohort:e})
+        },
+        onUpdateTempCohort:function(e){
+            dispatch({type:'UPDATETEMPCOHORT', updateTempCohorts:e})
         }
     }
 }

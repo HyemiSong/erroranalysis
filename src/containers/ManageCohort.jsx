@@ -45,6 +45,9 @@ function mapDispatchToProps(dispatch){
         },
         onChangeCurrentCohort:function(e){
             dispatch({type:'CURRENTCOHORT', currentCohort:e})
+        },
+        onUpdateNewTreeData:function(e){
+            dispatch({type:'NEWTREEDATA', updateTreedata:e})
         }
     }
 }

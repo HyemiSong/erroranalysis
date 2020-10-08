@@ -2,7 +2,7 @@ import React, {useRef, useState, useEffect} from 'react';
 import * as d3 from 'd3';
 import { IStackTokens, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Dropdown, DropdownMenuItemType, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-
+import { nodeColor } from '../../Constant'
 
 export default function MatrixFilter(props){
 //Fabric UI
@@ -27,11 +27,10 @@ export default function MatrixFilter(props){
         const [selectedCells, setClickedCells] = useState(selectedCellsArr);
         const [selectedCellsErr, setSelectedCellsErr] = useState(selectedCellsErrRate);
         const [matrixData, setMatrixData] = useState(data);
+        const [selectedClusterInfo, setSelectedClusterInfo] = useState(cohorts)
         const [currentCohort, setCurrentCohort] = useState(cCohort);
         const [tCohorts, setTempCohorts] = useState(tempCohorts);
         const ref = useRef();
-        
-       // console.log(_clickedCells);
 
 //graph width, height
         const margin = {top:40, right:50, bottom:70, left:50, sm: 2};
@@ -57,10 +56,13 @@ export default function MatrixFilter(props){
             props.onChangeCurrentCohort(tempCohorts[1])
 // svg creation
             const svg = d3.select(ref.current)
+            svg.selectAll("g").remove();
+
             svg
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
+            .attr("class", "svgClass")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 // xAxis creation
             const xAxis = d3.scaleBand();
@@ -97,67 +99,113 @@ export default function MatrixFilter(props){
             .enter()
 
             cell
+            .append('defs')
+            .append('pattern')
+                .attr('id', 'diagonalHatch')
+                .attr('patternUnits', 'userSpaceOnUse')
+                .attr('width', 4)
+                .attr('height', 4)
+            .append('path')
+                .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
+                .attr('stroke', 'grey')
+                .attr('stroke-width', 1);
+
+            cell
             .append("rect")
             .attr("x", function(d){return (value1.includes(d.value1))? (value1.indexOf(d.value1) * gridSize) + margin.left + margin.sm : 0; })
             .attr("y", function(d){return (value2.includes(d.value2))? value2.indexOf(d.value2) * gridSize : 0; })
             .attr("class", "cell")
             .attr("width", xAxis.bandwidth())
             .attr("height", yAxis.bandwidth())
-            .style("stroke", "white")
-            .style("stroke-width", 1)
-            .style("stroke-opacity", 0.6)
-            .style("fill", function(d) { return (d.isClick === undefined || d.isClick === false) ? "blue" : "red"})
-            .on("click", function(d, i){
-                //cal clicked cell info
-                let isClick = (d.isClick === undefined || d.isClick === false) ? true : false;
-                d.isClick = isClick;
+            .style("stroke", function(d) { return (d.isClick === undefined || d.isClick === false) ? "white" : "white"})
+            .style("stroke-width", 0)
+            .style("fill", function(d, i) { return (d.error === 0) ? "#B2B7BD" : nodeColor(((d.error/d.data.length) * 100).toFixed(1))})
+            .on("click", function(d, i){ return onClickEvent(d, i)})
 
-                //add clicked cell
-                let _clickedCells = [];
-                for(let i = 0; i < data.length; i++){
-                    if(data[i].isClick === true){
-                        _clickedCells.push(data[i])
+            cell
+            .append("rect")
+            .attr("x", function(d){return (value1.includes(d.value1))? (value1.indexOf(d.value1) * gridSize) + margin.left + margin.sm : 0; })
+            .attr("y", function(d){return (value2.includes(d.value2))? value2.indexOf(d.value2) * gridSize : 0; })
+            .attr("class", "cellPattern")
+            .attr("width", xAxis.bandwidth())
+            .attr("height", yAxis.bandwidth())
+            .style("stroke", "none")
+            .style("stroke-width", 3)
+            .style("stroke-opacity", 1)
+            .style("fill", function(d) { return (d.isClick === undefined || d.isClick === false) ? "none" : 'url(#diagonalHatch)'})
+            .on("click", function(d, i){ return onClickEvent(d, i)})
+
+            function onClickEvent(d, i){
+                    //cal clicked cell info
+                    let isClick = (d.isClick === undefined || d.isClick === false) ? true : false;
+                    d.isClick = isClick;
+    
+                    //add clicked cell
+                    let _clickedCells = [];
+                    for(let i = 0; i < data.length; i++){
+                        if(data[i].isClick === true){
+                            _clickedCells.push(data[i])
+                        }
                     }
-                }
+    
+                    //cal and add error rate
+                    let allDataArr = [];
+                    let allErrArr = [];
+                    for(let i = 0; i < data.length; i++){
+                        allDataArr.push(data[i].data.length);
+                        allErrArr.push(data[i].error)
+                    };
+    
+                    let cellErrArr = [];
+                    let cellDataArr = [];
+                    for(let i = 0; i < _clickedCells.length; i++){
+                        cellDataArr.push(_clickedCells[i].data.length)
+                        cellErrArr.push(_clickedCells[i].error)
+                    }
+                    let allDataSum = allDataArr.reduce(function add(a,b){
+                        return a + b
+                    }, 0)
+                    let allErrSum = allErrArr.reduce(function add(a,b){
+                        return a + b
+                    })
+                    let dataSum = cellDataArr.reduce(function add(a,b){
+                        return a + b
+                    }, 0)
+                    let errSum = cellErrArr.reduce(function add(a,b){
+                        return a + b
+                    }, 0)
 
-                //cal and add error rate
-                let allErrArr = [];
-                let allDataArr = [];
-                for(let i = 0; i < _clickedCells.length; i++){
-                    allDataArr.push(_clickedCells[i].data.length)
-                    allErrArr.push(_clickedCells[i].error)
-                }
-                let dataSum = allDataArr.reduce(function add(a,b){
-                    return a + b
-                }, 0)
+                    // console.log(allDataSum)
+                    // console.log(allErrSum)
+                    // console.log(dataSum)
+                    // console.log(errSum)
 
-                let errSum = allErrArr.reduce(function add(a,b){
-                    return a + b
-                }, 0)
-
-                let errorRate = ((errSum/dataSum) * 100).toFixed(2);
-                let result = (_clickedCells.length === 0 || errorRate === "NaN") ? 1.7 : errorRate;
-                setSelectedCellsErr(result);
-                props.onCellClickErr(result);
-
-                console.log(errSum)
-                console.log(dataSum)
-                console.log(errorRate)
-                console.log(selectedCellsErrRate)
-
-                let updatedData = data;
-
-                //update data
-                setMatrixData(updatedData);
-                nodeStateChange(updatedData)
-                setClickedCells(_clickedCells)
-                props.onCellClick(_clickedCells)
-                props.onClickCohortInfo(true)
-
-                //cell color
-                d3.selectAll(".cell")
-                .style("fill", function(d) { return (d.isClick === undefined || d.isClick === false) ? "blue" : "red"})
-            })
+                    let errorRate = ((errSum/dataSum) * 100).toFixed(2);
+                    let coverage = Number(((errSum/allErrSum) * 100).toFixed(2));
+                    let result = Number((_clickedCells.length === 0 || errorRate === "NaN") ? 0 : errorRate);
+    
+                    let _tempCohorts = [
+                        {id:0, saved:tempCohorts[0].name, name:tempCohorts[0].name, parent:'Treemap', meta:'metadata', filter:tempCohorts[0].filter, coverage:tempCohorts[0].coverage, errorRate:tempCohorts[0].errorRate, success:tempCohorts[0].success, error:tempCohorts[0].error},
+                        {id:1, saved:tempCohorts[1].name, name:tempCohorts[1].name, parent:'Heatmap', meta:'metadata', filter:2, coverage: coverage, errorRate:result, success:(dataSum-errSum), error:errSum}
+                    ]
+    
+                    let updatedData = data;
+                    
+                    //update data
+                    setSelectedCellsErr(result);
+                    props.onCellClickErr(result);
+                    setTempCohorts(_tempCohorts);
+                    props.onUpdateTempCohort(_tempCohorts);
+                    setMatrixData(updatedData);
+                    nodeStateChange(updatedData)
+                    setClickedCells(_clickedCells)
+                    props.onCellClick(_clickedCells)
+                    props.onClickCohortInfo(true)
+    
+                    //cell color
+                    d3.selectAll(".cellPattern")
+                    .style("fill", function(d) { return (d.isClick === undefined || d.isClick === false) ? "none" : 'url(#diagonalHatch)'})
+            }
 
             function nodeStateChange(updatedData){
                 // setClickedCells(clickedCells);
@@ -188,8 +236,8 @@ export default function MatrixFilter(props){
                                 <div className="flex-container padding-xxsm">
                                     <div id="metric-bar" className="black"></div>
                                     <div className="padding-xxsm">
-                                        <div className="font-size-10 regular">Error coverate (%)</div>
-                                        <div className="font-size-28 bold">{selectedCellsArr.length}</div>
+                                        <div className="font-size-10 regular">Error coverage (%)</div>
+                                        <div className="font-size-28 bold">{tempCohorts[1].coverage}</div>
                                     </div>
                                 </div>
                             </div>
@@ -199,17 +247,17 @@ export default function MatrixFilter(props){
                                     </div>
                                     <div className="padding-xxsm">
                                         <div className="font-size-10 regular">Error rate (%)</div>
-                                        <div className="font-size-28 bold datavis-7">{selectedCellsErr}</div>
+                                        <div className="font-size-28 bold datavis-7">{tempCohorts[1].errorRate}</div>
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="metric-area">
+                            <div className="metric-area">
                                 <div className="flex-container padding-xxsm">
                                 <div id="metric-bar" className="datavis-1-bg"></div>
                                     <div className="padding-xxsm">
                                         <div className="font-size-10 regular">Correct (Num.)</div>
                                         <div className="font-size-28 bold flex-container">
-                                            <div className="datavis-1">{cohorts[0].success}</div>
+                                            <div className="datavis-1">{tempCohorts[1].success}</div>
                                             <div>/{treeData.size}</div>
                                         </div>
                                     </div>
@@ -221,12 +269,12 @@ export default function MatrixFilter(props){
                                     <div className="padding-xxsm">
                                         <div className="font-size-10 regular">Incurrect (Num.)</div>
                                         <div className="font-size-28 bold flex-container">
-                                            <div className="datavis-7">{cohorts[0].error}</div>
+                                            <div className="datavis-7">{tempCohorts[1].error}</div>
                                             <div>/{treeData.size}</div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
                         </div>
                     </div>
                     <div className="padding-left-sm padding-top-xlg">

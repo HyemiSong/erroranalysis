@@ -15,6 +15,12 @@ function mapReduxStateToReactProps(state){
 }
 function mapDispatchToProps(dispatch){
     return{
+        onClickAddCohort:function(e){
+            dispatch({type:'ADDCOHORT', addCohort:e})
+        },
+        onClickManageCohort:function(e){
+            dispatch({type:'MANAGECOHORT', manageCohort:e})
+        }
     }
 }
 export default connect(mapReduxStateToReactProps, mapDispatchToProps)(SubTopbar)

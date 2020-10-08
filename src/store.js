@@ -5,7 +5,7 @@ import Tree_FaceAPI from './data/Tree_FaceAPI';
 import Heat_FaceAPI from './data/Heat_FaceAPI';
 
 export default createStore(function(state, action){
-    console.log(state, action)
+    //console.log(state, action)
     //console.log(Heat_FaceAPI())
     if(state === undefined){
         return{
@@ -30,11 +30,11 @@ export default createStore(function(state, action){
             cohortTitle:[{detector:"Error Detector", explainer:"Explanation"}],
             max_id:2,
             cohorts:[
-                {key:0, id:0, saved:'All Data', name:'All Data', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238}
+                {key:0, id:0, saved:'All Data', name:'All Data', parent:'Treemap', meta:'metadata', filter:'', count:1, coverage:100, errorRate:5.49, success:1170, error:68, allsize:1238}
             ],
             tempCohorts:[
-                {key:0, id:0, saved:'All Data', name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', count: 1, coverage: 5.5, errorRate:5.5, success:1170, error:68, allsize:1238},
-                {key:1, id:1, saved:'All Data', name:'All Data-2', parent:'Heatmap', meta:'metadata', filter:'', count: 1, coverage: 0, errorRate:0, success:0, error:0, allsize:1238}
+                {key:0, id:0, saved:'All Data', name:'All Data-1', parent:'Treemap', meta:'metadata', filter:'', count:1, coverage:100, errorRate:5.49, success:1170, error:68, allsize:1238},
+                {key:1, id:1, saved:'All Data', name:'All Data-2', parent:'Heatmap', meta:'metadata', filter:'', count:1, coverage:0, errorRate:0, success:0, error:0, allsize:1238}
             ],
             cohortEditTarget: ""
         }
@@ -107,6 +107,9 @@ export default createStore(function(state, action){
     }
     if(action.type === 'UPDATETEMPCOHORT'){
         return {...state, tempCohorts:action.updateTempCohorts}
+    }
+    if(action.type === 'NEWTREEDATA'){
+        return {...state, treeData:action.updateTreedata}
     }
     return state;
 }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())

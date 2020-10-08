@@ -1,6 +1,7 @@
 import React, {useRef, useState, useEffect} from 'react';
 import * as d3 from 'd3';
-import { nodeColor } from '../../Constant'
+import { nodeColor, nodeColor1 } from '../../Constant'
+import Tree_FaceAPI from '../../data/Tree_FaceAPI';
 
 export default function Treemap (props){
 //console.log(props)
@@ -10,6 +11,7 @@ const d3Transform = props.d3Transform;
 const cohorts = props.cohorts;
 const tempCohorts = props.tempCohorts;
 const cCohort = props.currentCohort;
+const allErrorSum = Tree_FaceAPI().error
 
 const [selectedCluster, setCluster] = useState(data);
 const [ancesterCluster, setAncester] = useState(treeData)
@@ -85,7 +87,7 @@ const ref = useRef();
             .attr("fill", "none")
             // .attr("stroke", "#E1E1E1")
             //.attr("stroke", function(d) { return (d.target.data.ancestor === true) ? nodeColor(((d.target.data.error/d.source.data.size) * 100).toFixed(1)) : "#E1E1E1"})
-            .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? "#00A2AD" : "#E1E1E1"})
+            .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? "#605E5C" : "#E1E1E1"})
             .attr( "d", d3.linkVertical().x(d => d.x).y(d => d.y))
             .attr("stroke-width", d => d.source.data.size*0.02)
             // .attr("fake", d=> console.log(d.source.data.size));
@@ -93,14 +95,15 @@ const ref = useRef();
         node
             .append("circle")
             .attr("class", "node nodeID ")
-            .attr("fill", "#D2D4D6")
-            .attr("stroke", function(d){return (d.data.ancestor === true) ? "#E3008C" : "#B2B7BD";})
+            .attr("fill", "#ffffff") //D2D4D6
+            .attr("stroke", function(d, i){return (d.data.ancestor === true || i === 0) ? "#E3008C" : nodeColor1(((d.data.error/d.data.size) * 100).toFixed(1))})
             .attr("stroke-width", function(d){return (d.data.ancestor === true) ? 2 : 2;})
             .attr("r", radius)
             //.attr("fake", d=> console.log(d));
 
         let rectHeight = function(r){
-                let h = r;
+                let h = r
+                let min = 3
                 if (h > 0 && h < 1) {
                     let t0, t1 = Math.pow(12 * h * Math.PI, 1 / 3);
                     for (let i = 0; i < 10; ++i) {
@@ -109,12 +112,12 @@ const ref = useRef();
                     }
                     h = (1 - Math.cos(t1 / 2)) / 2;
                 }
-                return h;
+                return (h < min) ? min : h;
         }
 
         let calHeight = function(d){
             let side = radius;
-            let height = side * (d.data.error/d.data.size);
+            let height = side * (d.data.error/allErrorSum);
             return height
         }
 
@@ -125,14 +128,14 @@ const ref = useRef();
             .append('rect')
             .attr("x", function(d){return radius * (-1)})
             .attr("width", function(d){return radius * 2})
-            .attr("y", function(d, i){return -10 + (radius-2*rectHeight(calHeight(d)))})
+            .attr("y", function(d, i){return (radius-2*rectHeight(calHeight(d)))})
             .attr("height", function(d, i){return 2*rectHeight(radius)})
 
         node
             .append("circle")
             .attr("class", "mask")
             .attr("clip-path", function(d, i) { return "url(#clip" + i + ")"})
-            .attr("fill", function(d, i) { return (d.data.error === 0) ? "#B2B7BD" : nodeColor(((d.data.error/d.data.size) * 100).toFixed(1))})
+            .attr("fill", function(d, i) { return (d.data.error === 0) ? "#B2B7BD" : nodeColor1(((d.data.error/d.data.size) * 100).toFixed(1))})
             //.attr("opacity", function(d, i) { return (d.data.error/d.data.size) * 1.6 + 0.1})
             .attr("r", radius*0.96)
             // .attr("fake", d => console.log(d));
@@ -141,7 +144,7 @@ const ref = useRef();
 
         node
             .append("text")
-            .style("opacity", function(d){return (d.data.ancestor === true) ? 1 : 0;})
+            .style("opacity", function(d, i){return (d.data.ancestor === true && i !== 0) ? 1 : 0;})
             .attr("y", d => (-d.y/d.depth)*0.5)
             .attr("text-anchor", "middle")
             .text(d => {return (d.data.PredictionPath === undefined) ? "sdfasd" : d.data.PredictionPath.split(",").pop()})
@@ -176,25 +179,25 @@ const ref = useRef();
                 setAncestors(_data)
                 
                 //metrix of clicked node
-                const _coverage = ((d.data.error/treeData.size) * 100).toFixed(2);
+                const _coverage = ((d.data.error/allErrorSum) * 100).toFixed(2);
                 const _errorRate = ((d.data.error/d.data.size) * 100).toFixed(2);
                 const _success = d.data.success;
                 const _error = d.data.error;
                 const _filter = d.data.PredictionPath.split(",");
                 let _tempCohorts = [
                         {id:0, saved:tempCohorts[0].name, name:tempCohorts[0].name, parent:'Treemap', meta:'metadata', filter:_filter, coverage: _coverage, errorRate: _errorRate, success:_success, error:_error},
-                        {id:1, saved:tempCohorts[1].name, name:tempCohorts[1].name, parent:'Heatmap', meta:'metadata', filter:_filter, coverage: 0, errorRate:0, success:0, error:0}
+                        {id:1, saved:tempCohorts[1].name, name:tempCohorts[1].name, parent:'Heatmap', meta:'metadata', filter:_filter, coverage: tempCohorts[1].coverage, errorRate:tempCohorts[1].errorRate, success:tempCohorts[1].success, error:tempCohorts[1].error}
                     ]
                 let isClicked = (data === "false") ? "true" : "false";
                 clusterChange(isClicked, _data, _transform, _tempCohorts)
             })
-            //console.log(cCohort)
             test(cCohort)
     }, [data, treeData, d3Transform, tempCohorts, cCohort]);
 
     function test(test){
         return test
     }
+
     function clusterChange(isClicked, _data, _transform, _tempCohorts){
         setCluster(isClicked)
         setAncester(_data)
@@ -232,7 +235,7 @@ return(
                         </div>
                     </div>
                 </div>
-                {/* <div className="metric-area">
+                <div className="metric-area">
                     <div className="flex-container padding-xxsm">
                        <div id="metric-bar" className="datavis-1-bg"></div>
                         <div className="padding-xxsm">
@@ -255,7 +258,7 @@ return(
                             </div>
                         </div>
                     </div>
-                </div> */}
+                </div>
             </div>
         </div>
     </div>

@@ -23,6 +23,12 @@ function mapDispatchToProps(dispatch){
     return{
         onClickCohortInfo:function(e){
             dispatch({type:'COHORTINFOCLOSE', cohortInfo:e})
+        },
+        onClickAddCohort:function(e){
+            dispatch({type:'ADDCOHORT', addCohort:e})
+        },
+        onClickManageCohort:function(e){
+            dispatch({type:'MANAGECOHORT', manageCohort:e})
         }
     }
 }

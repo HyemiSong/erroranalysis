@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/85000fc4-997c-470d-b4f1-6f59d3d6cc11/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/hyeaprototype1",
+    "appService.deploySubpath": "."
+}

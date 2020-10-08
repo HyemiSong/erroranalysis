@@ -2,6 +2,7 @@
   "name": "error-proto1",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@fluentui/react": "^7.133.0",
     "@testing-library/jest-dom": "^4.2.4",

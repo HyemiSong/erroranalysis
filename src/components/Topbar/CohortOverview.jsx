@@ -4,21 +4,20 @@ import CoverageImg from '../../image/coverage.png';
 import ErrorRateImg from '../../image/errorrate.png';
 
 export default class CohortOverview extends Component{
-    tempCohort(){
-        const { map, tempCohorts } = this.props;
-
-        let tempCohort = null;
+    tempCohort(map, tempCohorts){
+        let index=1;
         if (map === "Treemap"){
-            //tempCohort =  this.props.currentCohort.clickedNode.id
+            index = 0;
         } else if (map === "Matrixfilter"){
-            //tempCohort = "test"
+            index = 1;
         }
-        return {coverage:tempCohorts[0].coverage, errorRate:tempCohorts[0].errorRate}
+        return {coverage:tempCohorts[index].coverage, errorRate:tempCohorts[index].errorRate}
     }
     render(){          
         const chromeCloseIcon = { iconName: 'ChromeClose'};
         const saveIcon = { iconName: 'Save' };
         const { disabled, checked } = this.props;
+        const { map, tempCohorts } = this.props;
 
         return(
             <div className="panel panel-md dropshadow-sm fixed top-170 right white_bg margine-right-15px">
@@ -50,15 +49,20 @@ export default class CohortOverview extends Component{
                                 <div className="removing-btn-margin-left">
                                 <IconButton 
                                     onClick={function(e){
-                                        let _clicked = false;
-                                        this.props.onCloseManageCohort(_clicked);
+                                        let _clicked = true;
+                                        this.props.onClickAddCohort(_clicked)
+                                        this.props.onClickManageCohort(_clicked);
                                     }.bind(this)}
                                     iconProps={saveIcon} title="Close" ariaLabel="Close" disabled={disabled} checked={checked} 
                                 />
                                 </div>
-                                <div className="padding-top-xxsm">
+                                <button className="txtbtn datavis-1" onClick={function(e){
+                                    let _clicked = true;
+                                    this.props.onClickAddCohort(_clicked)
+                                    this.props.onClickManageCohort(_clicked);
+                                }.bind(this)}>
                                     Save to the cohort list
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -74,7 +78,7 @@ export default class CohortOverview extends Component{
                                 <div className="flex-container">
                                     <div className="metric padding-top-xsm"> 
                                         <div className="font-size-20 semibold">
-                                          {this.tempCohort().coverage}
+                                          {this.tempCohort(map, tempCohorts).coverage}
                                         </div>
                                         <div className="font-size-12 text-grey">Coverage(%)</div>
                                     </div>
@@ -85,7 +89,7 @@ export default class CohortOverview extends Component{
                                 <div className="flex-container">
                                     <div className="metric padding-top-xsm"> 
                                         <div className="font-size-20 semibold">
-                                            {this.tempCohort().errorRate} 
+                                            {this.tempCohort(map, tempCohorts).errorRate} 
                                         </div>
                                     <div className="font-size-12 text-grey">Error Rate(%)</div>
                                     </div>

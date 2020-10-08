@@ -17,8 +17,9 @@ export default class SubTopbar extends Component{
                     <div>
                         <IconButton 
                             onClick={function(e){
-                                let _clicked = false;
-                                // this.props.onCloseManageCohort(_clicked);
+                                let _clicked = true;
+                                this.props.onClickAddCohort(_clicked)
+                                this.props.onClickManageCohort(_clicked);
                             }.bind(this)}
                             iconProps={saveIcon} title="Close" ariaLabel="Close" disabled={disabled} checked={checked} 
                         />

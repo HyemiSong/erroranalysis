@@ -3,6 +3,7 @@ import AddCohortRoot from './AddCohortRoot'
 import { IconButton } from 'office-ui-fabric-react';
 import { ActionButton, DefaultButton, Stack, PrimaryButton } from 'office-ui-fabric-react';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
+import Tree_FaceAPI from '../../data/Tree_FaceAPI';
 
 export default class ManageCohort extends Component{
     state = {
@@ -33,8 +34,7 @@ export default class ManageCohort extends Component{
         const chevronDownIcon = { iconName: 'ChevronDown'};
         const cohortInfoIcon = { iconName: 'Info' };
         const stackTokens = { childrenGap: 10 };
-        const { disabled, checked } = this.props;
-        const currentCohort = this.props.currentCohort;
+        const { disabled, checked, currentCohort, treeData} = this.props;
 
         let tempCohortArr = [];
         let savedCohortArr = [];
@@ -165,6 +165,21 @@ export default class ManageCohort extends Component{
                                 )
                                 this.props.onUpdateTempCohort(tempCohorts)
                                 this.props.onChangeCurrentCohort(_currentCohort)
+
+                                console.log(this.state.baseCohort);
+                                console.log(currentCohort.saved)
+
+                                if(this.state.baseCohort !== this.state.savedCohort){
+                                    let _data;
+                                    if(this.state.baseCohort === cohorts[0].name){
+                                        _data = Tree_FaceAPI();
+                                    }else{
+                                        _data = treeData.children[0];
+                                    }
+                                    
+                                    this.props.onUpdateNewTreeData(_data)
+                                }
+
                             }.bind(this)}>
 
                             <div className="sub-inner-section padding-top-xsm">
