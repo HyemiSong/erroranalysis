@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 import * as d3 from 'd3';
-import { nodeColor, nodeColor1 } from '../../Constant'
+import { nodeColor, nodeColor1, nodeHighlight, treeBg, pill } from '../../Constant'
 import Tree_FaceAPI from '../../data/Tree_FaceAPI';
 
 export default function Treemap (props){
@@ -30,11 +30,12 @@ const ref = useRef();
         const width = 929;
         const height = 535;
         const root = d3.hierarchy(treeData);
-        const dx = 60;
-        const dy = 100;
+        const dx = 70;
+        const dy = 140;
         const margin = { top:50, botton:50, left:50, right:50 };
         const tree = d3.tree().nodeSize([dx, dy]);
         const radius = 25;
+        const minErrorRate = 4;
         let _transform ={};
         tree(root)
 
@@ -48,11 +49,11 @@ const ref = useRef();
         const svgTree = d3.select(ref.current)
             .style("width", width)
             .style("height", height)
+            .style("background-color", treeBg)
 
         svgTree.selectAll(".canvas1").remove()
         const g = svgTree.append("g")
             .attr("class", "canvas1")
-            .attr("background-color", "red")
 
         let zoom = d3.zoom()
             .scaleExtent([1/3, 4])
@@ -85,9 +86,9 @@ const ref = useRef();
         link
             .append("path")
             .attr("fill", "none")
-            // .attr("stroke", "#E1E1E1")
+            //.attr("stroke", "#E1E1E1")
             //.attr("stroke", function(d) { return (d.target.data.ancestor === true) ? nodeColor(((d.target.data.error/d.source.data.size) * 100).toFixed(1)) : "#E1E1E1"})
-            .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? "#605E5C" : "#E1E1E1"})
+            .attr("stroke", function(d) { return (d.target.data.ancestor === true) ? nodeHighlight : "#E1E1E1"})
             .attr( "d", d3.linkVertical().x(d => d.x).y(d => d.y))
             .attr("stroke-width", d => d.source.data.size*0.02)
             // .attr("fake", d=> console.log(d.source.data.size));
@@ -96,10 +97,27 @@ const ref = useRef();
             .append("circle")
             .attr("class", "node nodeID ")
             .attr("fill", "#ffffff") //D2D4D6
-            .attr("stroke", function(d, i){return (d.data.ancestor === true || i === 0) ? "#E3008C" : nodeColor1(((d.data.error/d.data.size) * 100).toFixed(1))})
-            .attr("stroke-width", function(d){return (d.data.ancestor === true) ? 2 : 2;})
+            .attr("stroke", function(d, i){return (d.data.error < minErrorRate) ? "#B2B7BD" : nodeColor1(((d.data.error/d.data.size) * 100).toFixed(1))})
+            .attr("stroke-width", 2)
             .attr("r", radius)
-            //.attr("fake", d=> console.log(d));
+           // .attr("fake", d=> console.log(d));
+
+        node
+            .append("circle")
+            .attr("class", "nodeStroke")
+            .attr("fill", "none") //D2D4D6
+            .attr("stroke", function(d, i){return (d.data.error < minErrorRate) ? "#B2B7BD" : nodeColor1(((d.data.error/d.data.size) * 100).toFixed(1))})
+            .attr("stroke-width", function(d, i){return (d.data.ancestor === true || i === 0) ? 5 : 0})
+            .attr("r", radius * 1.1)
+
+        node
+            .append("circle")
+            .attr("class", "clickedNode")
+            .attr("fill", "none") //D2D4D6
+            .style("stroke-dasharray", ("3, 3")) 
+            .attr("stroke", function(d, i){return (d.data.ancestor === true|| i === 0) ? nodeHighlight : "none"})
+            .attr("stroke-width", function(d, i){return (d.data.ancestor === true || i === 0) ? 2 : 0})
+            .attr("r", radius * 1.4)
 
         let rectHeight = function(r){
                 let h = r
@@ -135,22 +153,51 @@ const ref = useRef();
             .append("circle")
             .attr("class", "mask")
             .attr("clip-path", function(d, i) { return "url(#clip" + i + ")"})
-            .attr("fill", function(d, i) { return (d.data.error === 0) ? "#B2B7BD" : nodeColor1(((d.data.error/d.data.size) * 100).toFixed(1))})
+            .attr("fill", function(d, i) { return (d.data.error < minErrorRate) ? "#B2B7BD" : nodeColor1(((d.data.error/d.data.size) * 100).toFixed(1))})
             //.attr("opacity", function(d, i) { return (d.data.error/d.data.size) * 1.6 + 0.1})
             .attr("r", radius*0.96)
-            // .attr("fake", d => console.log(d));
+            // .attr("fake", d => console.log(d)); 
 
-        d3.selectAll(".node").attr("nodeID", function(d,i) {return "nodeID#" + i})
+        d3.selectAll(".node").attr("nodeID", function(d, i) {return "nodeID#" + i})
 
         node
             .append("text")
+            .style("font-size", 12)
             .style("opacity", function(d, i){return (d.data.ancestor === true && i !== 0) ? 1 : 0;})
             .attr("y", d => (-d.y/d.depth)*0.5)
+            // .attr("x", d => (-d.x/d.depth)*0.5)
             .attr("text-anchor", "middle")
             .text(d => {return (d.data.PredictionPath === undefined) ? "sdfasd" : d.data.PredictionPath.split(",").pop()})
+            .call(getTextBox);
+        
+        node.filter(function(d) {return (!d.image)}).insert("rect","text")
+            .style("opacity", function(d, i){return (d.data.ancestor === true && i !== 0) ? 1 : 0;})
+            .attr("rx", 15)
+            .attr("ry", 15)
+            .attr("x", function(d){return d.bbox.x - pill.txtPaddingX/2})
+            .attr("y", function(d){return d.bbox.y - pill.txtPaddingY/2})
+            .attr("width", function(d){return d.bbox.width + pill.txtPaddingX})
+            .attr("height", function(d){return d.bbox.height + pill.txtPaddingY})
+            .style("stroke", pill.stroke)
+            .style("stroke-width", 1)
+            .style("fill", "#FFFFFF");
+
+        function getTextBox(selection){
+            selection.each(function(d) { d.bbox = this.getBBox(); })
+        }
+
+        node
+            .append("text")
+            .attr("class", "nodeError")
+            //.style("opacity", function(d, i){return (d.data.ancestor === true && i !== 0) ? 1 : 0;})
+            .attr("y", 5)
+            // .attr("x", d => (-d.x/d.depth)*0.5)
+            .attr("text-anchor", "middle")
+            .text(d => {return (d.data.PredictionPath === undefined) ? "nodata" : d.data.error})
 
         node
             .on("click", function(d, i){
+                console.log(d)
                 let ancestors = [d.data.id];
                 let clickedNode = d.data;
                 let ancestor = (d.parent === null)? d : d.parent;
@@ -170,7 +217,7 @@ const ref = useRef();
                     //console.log({"ancestors":ancestors, "o.name":o.name, "include":includedParent})
                     o["ancestor"] = includedParent;
                     o["clickedNode"] = clickedNode;
-                    if(o.children != undefined){
+                    if(o.children !== undefined){
                         for(let n in o.children){
                             setAncestors(o.children[n])
                         }
@@ -239,7 +286,7 @@ return(
                     <div className="flex-container padding-xxsm">
                        <div id="metric-bar" className="datavis-1-bg"></div>
                         <div className="padding-xxsm">
-                            <div className="font-size-10 regular">Currect (Num.)</div>
+                            <div className="font-size-10 regular">Correct (Num.)</div>
                             <div className="font-size-28 bold flex-container">
                                 <div className="datavis-1">{tempCohorts[0].success}</div>
                                 <div>/{treeData.size}</div>
@@ -251,7 +298,7 @@ return(
                     <div className="flex-container padding-xxsm">
                         <div id="metric-bar" className="datavis-7-bg"></div>
                         <div className="padding-xxsm">
-                            <div className="font-size-10 regular">Incurrect (Num.)</div>
+                            <div className="font-size-10 regular">Incorrect (Num.)</div>
                             <div className="font-size-28 bold flex-container">
                                 <div className="datavis-7">{tempCohorts[0].error}</div>
                                 <div>/{treeData.size}</div>

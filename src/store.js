@@ -5,7 +5,7 @@ import Tree_FaceAPI from './data/Tree_FaceAPI';
 import Heat_FaceAPI from './data/Heat_FaceAPI';
 
 export default createStore(function(state, action){
-    //console.log(state, action)
+    console.log(state, action)
     //console.log(Heat_FaceAPI())
     if(state === undefined){
         return{

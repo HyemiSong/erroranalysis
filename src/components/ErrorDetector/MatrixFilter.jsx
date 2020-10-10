@@ -267,7 +267,7 @@ export default function MatrixFilter(props){
                                 <div className="flex-container padding-xxsm">
                                     <div id="metric-bar" className="datavis-7-bg"></div>
                                     <div className="padding-xxsm">
-                                        <div className="font-size-10 regular">Incurrect (Num.)</div>
+                                        <div className="font-size-10 regular">Incorrect (Num.)</div>
                                         <div className="font-size-28 bold flex-container">
                                             <div className="datavis-7">{tempCohorts[1].error}</div>
                                             <div>/{treeData.size}</div>
