@@ -11,3 +11,4 @@ export const nodeColor1 = d3.scaleLinear()
 export const nodeHighlight = "#0078D4";
 export const treeBg = "#FFFFFF" //"#F4F4F4" "#FFFFFF"
 export const pill = {txtPaddingX:16, txtPaddingY:10, stroke: "#0078D4"}
+export const metrixColor = {black: "#000000", unknown: "#949494"}

@@ -273,6 +273,12 @@ select{
 .transparent{
     background-color: transparent;
 }
+.BodyText-M365{
+    color: #323130;
+}
+.Datavis-Unkownstatus{
+    color: #949494;
+}
 
 /* positions */
 .relative{

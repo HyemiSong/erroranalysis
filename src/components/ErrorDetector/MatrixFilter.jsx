@@ -253,12 +253,12 @@ export default function MatrixFilter(props){
                             </div>
                             <div className="metric-area">
                                 <div className="flex-container padding-xxsm">
-                                <div id="metric-bar" className="datavis-1-bg"></div>
+                                <div id="metric-bar" className="black"></div>
                                     <div className="padding-xxsm">
-                                        <div className="font-size-10 regular">Correct (Num.)</div>
+                                        <div className="font-size-10 regular">Correct/All (Num.)</div>
                                         <div className="font-size-28 bold flex-container">
-                                            <div className="datavis-1">{tempCohorts[1].success}</div>
-                                            <div>/{treeData.size}</div>
+                                            <div className="BodyText-M365">{tempCohorts[0].success}/</div>
+                                            <div className="Datavis-Unkownstatus">{treeData.size}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -267,10 +267,10 @@ export default function MatrixFilter(props){
                                 <div className="flex-container padding-xxsm">
                                     <div id="metric-bar" className="datavis-7-bg"></div>
                                     <div className="padding-xxsm">
-                                        <div className="font-size-10 regular">Incorrect (Num.)</div>
+                                        <div className="font-size-10 regular">Incorrect/All (Num.)</div>
                                         <div className="font-size-28 bold flex-container">
-                                            <div className="datavis-7">{tempCohorts[1].error}</div>
-                                            <div>/{treeData.size}</div>
+                                            <div className="datavis-7">{tempCohorts[1].error}/</div>
+                                            <div className="Datavis-Unkownstatus">{treeData.size}</div>
                                         </div>
                                     </div>
                                 </div>
